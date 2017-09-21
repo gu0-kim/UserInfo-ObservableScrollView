@@ -32,6 +32,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:' + appcompatv7_version
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile project(':observableviewlibrary')
     testCompile 'junit:junit:4.12'
 }
