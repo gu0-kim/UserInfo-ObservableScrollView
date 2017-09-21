@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/white" />
 
-    <com.github.ksoichiro.android.observablescrollview.ObservableGridView
+    <com.gu.observableviewlibrary.ObservableGridView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
