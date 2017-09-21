@@ -21,9 +21,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
-import com.github.ksoichiro.android.observablescrollview.Scrollable;
+import com.gu.observableviewlibrary.ObservableScrollView;
+import com.gu.observableviewlibrary.ScrollUtils;
+import com.gu.observableviewlibrary.Scrollable;
+
 
 public class FlexibleSpaceWithImageScrollViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableScrollView> {
 

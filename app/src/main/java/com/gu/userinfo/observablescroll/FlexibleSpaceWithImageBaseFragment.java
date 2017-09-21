@@ -20,9 +20,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.github.ksoichiro.android.observablescrollview.Scrollable;
+import com.gu.observableviewlibrary.ObservableScrollViewCallbacks;
+import com.gu.observableviewlibrary.ScrollState;
+import com.gu.observableviewlibrary.Scrollable;
+
 
 public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> extends BaseFragment
     implements ObservableScrollViewCallbacks {

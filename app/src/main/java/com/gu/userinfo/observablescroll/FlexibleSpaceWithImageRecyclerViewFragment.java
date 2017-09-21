@@ -19,15 +19,15 @@ package com.gu.userinfo.observablescroll;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.gu.observableviewlibrary.ObservableRecyclerView;
+import com.gu.observableviewlibrary.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
+
 
 public class FlexibleSpaceWithImageRecyclerViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableRecyclerView> {
     private static final String TAG = "TAG";

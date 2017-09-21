@@ -23,21 +23,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
-import com.github.ksoichiro.android.observablescrollview.Scrollable;
-import com.google.samples.apps.iosched.ui.widget.SlidingTabLayout;
+import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
+import com.gu.observableviewlibrary.ScrollUtils;
+import com.gu.observableviewlibrary.Scrollable;
+import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.PtrUIHandler;

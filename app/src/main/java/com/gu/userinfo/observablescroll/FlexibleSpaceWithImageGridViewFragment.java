@@ -25,8 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableGridView;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.gu.observableviewlibrary.ObservableGridView;
+import com.gu.observableviewlibrary.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 
 public class FlexibleSpaceWithImageGridViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableGridView> {
@@ -35,7 +35,7 @@ public class FlexibleSpaceWithImageGridViewFragment extends FlexibleSpaceWithIma
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flexiblespacewithimagegridview, container, false);
 
-        final ObservableGridView gridView = (ObservableGridView) view.findViewById(R.id.scroll);
+        final ObservableGridView gridView =  view.findViewById(R.id.scroll);
         // Set padding view for GridView. This is the flexible space.
         View paddingView = new View(getActivity());
         final int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);

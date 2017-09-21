@@ -12,12 +12,18 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.Toolbar">
+
+        </activity>
+        <activity
+            android:name=".FlexibleSpaceWithImageWithViewPagerTabActivity"
+            android:theme="@style/AppTheme.Toolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

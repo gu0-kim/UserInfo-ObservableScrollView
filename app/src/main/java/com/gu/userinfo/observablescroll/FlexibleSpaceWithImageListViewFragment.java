@@ -24,8 +24,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableListView;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.gu.observableviewlibrary.ObservableListView;
+import com.gu.observableviewlibrary.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 
 public class FlexibleSpaceWithImageListViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableListView> {
