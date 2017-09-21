@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
@@ -29,4 +30,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:' + appcompatv7_version
     compile 'com.android.support:recyclerview-v7:' + appcompatv7_version
     testCompile 'junit:junit:4.12'
+}
+publish {
+    userOrg = 'developergu'//bintray.com用户名
+    groupId = 'com.gu'//jcenter上的路径
+    artifactId = 'observablescrollview'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = 'observable views'//描述，不重要
+    website = 'https://...'//网站，不重要；
 }

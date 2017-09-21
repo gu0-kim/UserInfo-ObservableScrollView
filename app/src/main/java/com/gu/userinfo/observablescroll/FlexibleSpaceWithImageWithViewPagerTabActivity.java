@@ -94,23 +94,13 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
         mSlidingTabLayout.setViewPager(mPager);
 
         // Initialize the first Fragment's state when layout is completed.
-        ScrollUtils.addOnGlobalLayoutListener(mSlidingTabLayout, new Runnable() {
-            @Override
-            public void run() {
-                translateTab(0, false);
-            }
-        });
+        ScrollUtils.addOnGlobalLayoutListener(mSlidingTabLayout, () -> translateTab(0, false));
         final PtrClassicFrameLayout ptrFrame = (PtrClassicFrameLayout) findViewById(R.id.pager_wrapper);
         ptrFrame.disableWhenHorizontalMove(true);
         ptrFrame.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                frame.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ptrFrame.refreshComplete();
-                    }
-                }, 1800);
+                frame.postDelayed(() -> ptrFrame.refreshComplete(), 1800);
             }
 
             @Override

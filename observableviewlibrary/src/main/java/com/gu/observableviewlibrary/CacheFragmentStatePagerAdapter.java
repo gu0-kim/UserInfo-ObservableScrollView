@@ -81,18 +81,7 @@ public abstract class CacheFragmentStatePagerAdapter extends FragmentStatePagerA
         super.restoreState(p, loader);
     }
 
-    /**
-     * Get a new Fragment instance.
-     * <p>Each fragments are automatically cached in this method,
-     * so you don't have to do it by yourself.
-     * If you want to implement instantiation of Fragments,
-     * you should override {@link #createItem(int)} instead.</p>
-     * <p/>
-     * {@inheritDoc}
-     *
-     * @param position Position of the item in the adapter.
-     * @return Fragment instance.
-     */
+
     @Override
     public Fragment getItem(int position) {
         Fragment f = mPages.get(position);
