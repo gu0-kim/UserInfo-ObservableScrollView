@@ -37,5 +37,5 @@ publish {
     artifactId = 'observablescrollview'//项目名称
     publishVersion = '1.0.0'//版本号
     desc = 'observable views'//描述，不重要
-    website = 'https://...'//网站，不重要；
+    website = 'https://github.com/gu0-kim/UserInfo-ObservableScrollView.git'//网站，不重要；
 }
