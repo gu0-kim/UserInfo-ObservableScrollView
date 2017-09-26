@@ -35,7 +35,7 @@ public class FlexibleSpaceWithImageGridViewFragment extends FlexibleSpaceWithIma
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flexiblespacewithimagegridview, container, false);
 
-        final ObservableGridView gridView =  view.findViewById(R.id.scroll);
+        final ObservableGridView gridView = view.findViewById(R.id.scroll);
         // Set padding view for GridView. This is the flexible space.
         View paddingView = new View(getActivity());
         final int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
@@ -111,8 +111,8 @@ public class FlexibleSpaceWithImageGridViewFragment extends FlexibleSpaceWithIma
         ViewHelper.setTranslationY(listBackgroundView, Math.max(0, -scrollY + flexibleSpaceImageHeight));
 
         // Also pass this event to parent Activity
-        FlexibleSpaceWithImageWithViewPagerTabActivity parentActivity =
-                (FlexibleSpaceWithImageWithViewPagerTabActivity) getActivity();
+        CloudMusicTabActivity parentActivity =
+                (CloudMusicTabActivity) getActivity();
         if (parentActivity != null) {
             parentActivity.onScrollChanged(scrollY, (ObservableGridView) view.findViewById(R.id.scroll));
         }

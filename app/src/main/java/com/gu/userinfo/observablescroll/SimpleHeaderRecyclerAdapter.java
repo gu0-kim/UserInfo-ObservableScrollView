@@ -18,6 +18,7 @@ package com.gu.userinfo.observablescroll;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+
 public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_HEADER = 0;
     private static final int VIEW_TYPE_ITEM = 1;
+    private static final int VIEW_TYPE_HEADER_DIVIDE = 2;
+    private static final int HEADER_COUNT = 2;
 
     private LayoutInflater mInflater;
     private ArrayList<String> mItems;
@@ -45,28 +49,30 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         if (mHeaderView == null) {
             return mItems.size();
         } else {
-            return mItems.size() + 1;
+            return mItems.size() + HEADER_COUNT;
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return (position == 0) ? VIEW_TYPE_HEADER : VIEW_TYPE_ITEM;
+        return position == 0 ? VIEW_TYPE_HEADER : (position == 1 ? VIEW_TYPE_HEADER_DIVIDE : VIEW_TYPE_ITEM);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_HEADER) {
             return new HeaderViewHolder(mHeaderView);
+        } else if (viewType == VIEW_TYPE_HEADER_DIVIDE) {
+            return new HeaderDivideHolder(mInflater.inflate(R.layout.recyclerview_divide, parent, false));
         } else {
-            return new ItemViewHolder(mInflater.inflate(android.R.layout.simple_list_item_1, parent, false));
+            return new ItemViewHolder(mInflater.inflate(R.layout.text_item, parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        if (viewHolder instanceof ItemViewHolder) {
-            ((ItemViewHolder) viewHolder).textView.setText(mItems.get(position - 1));
+        if (position > 1) {
+            ((ItemViewHolder) viewHolder).textView.setText(mItems.get(position - HEADER_COUNT));
         }
     }
 
@@ -81,13 +87,18 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
 
         public ItemViewHolder(View view) {
             super(view);
-            textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "on Click Item!", Toast.LENGTH_SHORT).show();
-                }
-            });
+            textView = view.findViewById(R.id.textview_rv);
+            if (textView == null) {
+                Log.e("TAG", "ItemViewHolder: textview == null");
+            }
+            itemView.setOnClickListener(v -> Toast.makeText(v.getContext(), "on Click Item!", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    static class HeaderDivideHolder extends RecyclerView.ViewHolder {
+
+        public HeaderDivideHolder(View view) {
+            super(view);
         }
     }
 

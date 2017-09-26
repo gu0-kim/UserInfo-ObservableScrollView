@@ -7,4 +7,6 @@
     <color name="primaryDark">#00796b</color>
     <color name="accent">#eeff41</color>
     <color name="accentLight">#F4FF81</color>
+    <color name="divideColor">#eee</color>
+    <color name="tra">#00000000</color>
 </resources>

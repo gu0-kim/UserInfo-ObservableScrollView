@@ -56,7 +56,7 @@ public class FlexibleSpaceWithImageListViewFragment extends FlexibleSpaceWithIma
         Bundle args = getArguments();
         if (args != null && args.containsKey(ARG_SCROLL_Y)) {
 //            final int scrollY = args.getInt(ARG_SCROLL_Y, 0);
-            final int scrollY = ((FlexibleSpaceWithImageWithViewPagerTabActivity) getActivity()).getScrollY();
+            final int scrollY = ((CloudMusicTabActivity) getActivity()).getScrollY();
             Log.e("TAG", "listview scrolly= " + scrollY);
             ScrollUtils.addOnGlobalLayoutListener(listView, new Runnable() {
                 @SuppressLint("NewApi")

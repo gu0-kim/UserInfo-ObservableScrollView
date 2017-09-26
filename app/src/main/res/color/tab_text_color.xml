@@ -15,7 +15,7 @@
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:color="#fff" android:state_selected="true" />
-    <item android:color="#9fff" />
+    <item android:color="@color/colorAccent" android:state_selected="true" />
+    <item android:color="#9555" />
 
 </selector>

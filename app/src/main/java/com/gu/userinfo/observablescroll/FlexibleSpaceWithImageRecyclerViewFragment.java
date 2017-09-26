@@ -59,7 +59,7 @@ public class FlexibleSpaceWithImageRecyclerViewFragment extends FlexibleSpaceWit
     private void performScroll(final View parent, final ObservableRecyclerView recyclerView) {
 //        Bundle args = getArguments();
 //        if (args != null && args.containsKey(ARG_SCROLL_Y)) {
-        final int scrollY = ((FlexibleSpaceWithImageWithViewPagerTabActivity) getActivity()).getScrollY();
+        final int scrollY = ((CloudMusicTabActivity) getActivity()).getScrollY();
         ScrollUtils.addOnGlobalLayoutListener(recyclerView, new Runnable() {
             @Override
             public void run() {
@@ -92,7 +92,7 @@ public class FlexibleSpaceWithImageRecyclerViewFragment extends FlexibleSpaceWit
         if (view == null) {
             return;
         }
-        ObservableRecyclerView recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
+        ObservableRecyclerView recyclerView = view.findViewById(R.id.scroll);
         if (recyclerView == null) {
             return;
         }
@@ -117,8 +117,8 @@ public class FlexibleSpaceWithImageRecyclerViewFragment extends FlexibleSpaceWit
 
         updateBackGroundView(view, scrollY);
         // Also pass this event to parent Activity
-        FlexibleSpaceWithImageWithViewPagerTabActivity parentActivity =
-            (FlexibleSpaceWithImageWithViewPagerTabActivity) getActivity();
+        CloudMusicTabActivity parentActivity =
+                (CloudMusicTabActivity) getActivity();
         if (parentActivity != null) {
             parentActivity.onScrollChanged(scrollY, (ObservableRecyclerView) view.findViewById(R.id.scroll));
         }

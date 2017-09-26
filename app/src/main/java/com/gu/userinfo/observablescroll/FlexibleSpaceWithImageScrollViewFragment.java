@@ -76,8 +76,8 @@ public class FlexibleSpaceWithImageScrollViewFragment extends FlexibleSpaceWithI
         ObservableScrollView scrollView = (ObservableScrollView) view.findViewById(R.id.scroll);
 
         // Also pass this event to parent Activity
-        FlexibleSpaceWithImageWithViewPagerTabActivity parentActivity =
-                (FlexibleSpaceWithImageWithViewPagerTabActivity) getActivity();
+        CloudMusicTabActivity parentActivity =
+                (CloudMusicTabActivity) getActivity();
         if (parentActivity != null) {
             parentActivity.onScrollChanged(scrollY, scrollView);
         }
