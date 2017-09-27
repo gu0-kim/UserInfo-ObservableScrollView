@@ -1,6 +1,6 @@
 # UserInfo-ObservableScrollView</br>
 ## CloudMusicTabActivity
-</br></br>
+</br>
 （1）下拉回弹效果
 </br>
 （2）statusbar适配（minsdk 14）
