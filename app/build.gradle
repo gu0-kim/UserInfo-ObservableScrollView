@@ -1,6 +1,22 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    signingConfigs {
+        release {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('C:\\Users\\devel\\save_key\\debug.keystore')
+            storePassword 'android'
+        }
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('C:\\Users\\devel\\save_key\\debug.keystore')
+            storePassword 'android'
+        }
+    }
+
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
@@ -18,6 +34,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        customBuildType {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            applicationIdSuffix 'gu'
+            versionNameSuffix '1.0.1'
+            proguardFile 'C:/Users/devel/AndroidStudioProjects/UserInfo-ObservableScrollView/app/proguard-rules.pro'
         }
     }
     compileOptions {
@@ -27,18 +51,48 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:' + appcompatv7_version
+    //
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile  'com.developergu:statusbarcolortools:1.0.0'
-    debugCompile project(':observableviewlibrary')
-    // Release build uses the synced latest version
-    releaseCompile 'com.gu:observablescrollview:1.0.0'
-//    compile 'com.gu:observablescrollview:1.0.0'
+    compile 'com.developergu:statusbarcolortools:1.0.0'
+    //注意customBuildTypeCompile的写法和Build Variants中的customBuildType对应
+    customBuildTypeCompile project(':observableviewlibrary')
+    debugCompile 'com.gu:observablescrollview:1.0.0'
+    releaseCompile project(':observableviewlibrary')
+    //    compile 'com.gu:observablescrollview:1.0.0'
     testCompile 'junit:junit:4.12'
+//    compile project(':observableviewlibrary')
+}
+
+android.applicationVariants.all { variant ->
+
+    variant.outputs.each { output ->
+        def outputFile = output.outputFile
+        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+            def fileName = outputFile.name;
+            if (android.defaultConfig.versionName != null) {
+                fileName = fileName.replace(".apk", "-${android.defaultConfig.versionName}.apk")
+            }
+            if (project.hasProperty('OUT_PUT_APK_SUFFIX_PARA')) {
+                fileName = fileName.replace(".apk", "-${OUT_PUT_APK_SUFFIX_PARA}.apk")
+            }
+            def today = new Date().format('yyMMddHHmm');
+            fileName = fileName.replace(".apk", "-${today}.apk")
+            if (project.hasProperty('OUT_PUT_DIR_PARA')) {
+                File output_dir1 = file("${OUT_PUT_DIR_PARA}");
+                output.outputFile = new File(output_dir1, fileName)
+                println "输出文件位置： " + output.outputFile
+                //}
+            } else {
+                output.outputFile = new File(outputFile.parent, fileName)
+                println "__输出文件位置__： " + output.outputFile
+            }
+        }
+    }
 }
