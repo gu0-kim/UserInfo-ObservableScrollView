@@ -143,7 +143,6 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
     }
 
 
-
     /**
      * Called by children Fragments when their scrollY are changed.
      * They all call this method even when they are inactive
@@ -156,7 +155,7 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
     public void onScrollChanged(int scrollY, Scrollable s) {
 
         FlexibleSpaceWithImageBaseFragment fragment =
-            (FlexibleSpaceWithImageBaseFragment) mPagerAdapter.getItemAt(mPager.getCurrentItem());
+                (FlexibleSpaceWithImageBaseFragment) mPagerAdapter.getItemAt(mPager.getCurrentItem());
         if (fragment == null) {
             return;
         }
@@ -214,9 +213,9 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
         if (animated) {
             // Animation will be invoked only when the current tab is changed.
             ViewPropertyAnimator.animate(mSlidingTabLayout)
-                .translationY(translationY)
-                .setDuration(200)
-                .start();
+                    .translationY(translationY)
+                    .setDuration(200)
+                    .start();
         } else {
             // When Fragments' scroll, translate tabs immediately (without animation).
             ViewHelper.setTranslationY(mSlidingTabLayout, translationY);
@@ -228,7 +227,7 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
         final TextView mTitleView = (TextView) view.findViewById(R.id.title);
         Configuration config = getResources().getConfiguration();
         if (Build.VERSION_CODES.JELLY_BEAN_MR1 <= Build.VERSION.SDK_INT
-            && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
+                && config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             ViewHelper.setPivotX(mTitleView, view.findViewById(android.R.id.content).getWidth());
         } else {
             ViewHelper.setPivotX(mTitleView, 0);
@@ -248,7 +247,7 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
 
             // Skip destroyed or not created item
             FlexibleSpaceWithImageBaseFragment f =
-                (FlexibleSpaceWithImageBaseFragment) mPagerAdapter.getItemAt(i);
+                    (FlexibleSpaceWithImageBaseFragment) mPagerAdapter.getItemAt(i);
             if (f == null) {
                 continue;
             }
@@ -258,7 +257,7 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
                 continue;
             }
             f.setScrollY(scrollY, mFlexibleSpaceHeight);
-            f.updateFlexibleSpace(scrollY);
+            f.updateBackGroundView(scrollY);
         }
     }
 

@@ -26,7 +26,7 @@ import com.gu.observableviewlibrary.Scrollable;
 
 
 public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> extends BaseFragment
-    implements ObservableScrollViewCallbacks {
+        implements ObservableScrollViewCallbacks {
 
     public static final String ARG_SCROLL_Y = "ARG_SCROLL_Y";
     private static final String ARG_FRAGMENT_NAME = "FRAGMENT_NAME";
@@ -47,6 +47,11 @@ public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> e
             args.putInt(ARG_FRAGMENT_NAME, name);
             setArguments(args);
         }
+    }
+
+    public int getName() {
+        Bundle bundle = getArguments();
+        return bundle.getInt(ARG_FRAGMENT_NAME, -1);
     }
 
     public void setScrollY(int scrollY, int threshold) {
@@ -75,6 +80,9 @@ public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> e
 
     protected void updateFlexibleSpace(int scrollY) {
         updateFlexibleSpace(scrollY, getView());
+    }
+
+    protected void updateBackGroundView(int scrollY) {
     }
 
     protected abstract void updateFlexibleSpace(int scrollY, View view);

@@ -17,7 +17,6 @@
 package com.gu.userinfo.observablescroll;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,8 +25,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
@@ -37,35 +36,11 @@ import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import in.srain.cube.views.ptr.PtrClassicFrameLayout;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
-import in.srain.cube.views.ptr.PtrUIHandler;
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
-/**
- * <p>Another implementation of FlexibleImage pattern + ViewPager.</p>
- * <p/>
- * <p>This is a completely different approach comparing to FlexibleImageWithViewPager2Activity.
- * <p/>
- * <p>Descriptions of this pattern:</p>
- * <ul>
- * <li>When the current tab is changed, tabs will be translated in Y-axis
- * using scrollY of the new page's Fragment.</li>
- * <li>The parent Activity and children Fragments strongly depend on each other,
- * so if you need to use this pattern, maybe you should extract some interfaces from them.<br>
- * (This is just an example, so we won't do it here.)</li>
- * <li>The parent Activity and children Fragments communicate bidirectionally:
- * the parent Activity will update the Fragment's state when the tab is changed,
- * and Fragments will tell the parent Activity to update the tab's translationY.</li>
- * </ul>
- * <p/>
- * <p>SlidingTabLayout and SlidingTabStrip are from google/iosched:<br>
- * https://github.com/google/iosched</p>
- */
-public class CloudMusicTabActivity extends BaseActivity {
 
-    protected static final float MAX_TEXT_SCALE_DELTA = 0.3f;
+public class CloudMusicTabActivity extends PtrActivity {
+
 
     private ViewPager mPager;
     private NavigationAdapter mPagerAdapter;
@@ -73,17 +48,17 @@ public class CloudMusicTabActivity extends BaseActivity {
     private TextView mTitleView;
     private int mFlexibleSpaceHeight;
     private int mTabHeight;
-    private int mActionBarSize;
+    private int mToolbarSize;
     private int mTileHeight;
     private int mScrollY;
-    private boolean mCanPull = true;
-    private static final int MAX_PULL_DISTANCE = 200;
-    public static final String TAG = "TAG";
+    private ImageView image;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cloud_music_main_activity);
+        image = (ImageView) findViewById(R.id.image);
         mTileHeight = getActionBarSize();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
@@ -110,75 +85,12 @@ public class CloudMusicTabActivity extends BaseActivity {
 
         // Initialize the first Fragment's state when layout is completed.
         ScrollUtils.addOnGlobalLayoutListener(mSlidingTabLayout, () -> {
-            mActionBarSize = toolbar.getHeight();
+            mToolbarSize = toolbar.getHeight();
             translateTab(0, false);
         });
         initPtrLayout();
     }
 
-    public static int px2dip(Context context, float pxValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (pxValue / scale + 0.5f);
-    }
-
-    private void initPtrLayout() {
-        final PtrClassicFrameLayout ptrFrame = (PtrClassicFrameLayout) findViewById(R.id.pager_wrapper);
-        ptrFrame.disableWhenHorizontalMove(true);
-        ptrFrame.getHeader().setVisibility(View.INVISIBLE);
-        ptrFrame.setPtrHandler(new PtrHandler() {
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                frame.postDelayed(ptrFrame::refreshComplete, 1800);
-            }
-
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return canPull();
-            }
-        });
-        final View image = findViewById(R.id.image);
-        ptrFrame.addPtrUIHandler(new PtrUIHandler() {
-            @Override
-            public void onUIReset(PtrFrameLayout frame) {
-
-            }
-
-            @Override
-            public void onUIRefreshPrepare(PtrFrameLayout frame) {
-
-            }
-
-            @Override
-            public void onUIRefreshBegin(PtrFrameLayout frame) {
-
-            }
-
-            @Override
-            public void onUIRefreshComplete(PtrFrameLayout frame) {
-
-            }
-
-            @Override
-            public void onUIPositionChange(PtrFrameLayout frame, boolean isUnderTouch, byte status, PtrIndicator ptrIndicator) {
-                mCanPull = validPullSize(ptrIndicator.getCurrentPosY());
-                float scale = (float) (ptrIndicator.getCurrentPosY() + mFlexibleSpaceHeight) / mFlexibleSpaceHeight;
-                ViewHelper.setPivotX(image, image.getWidth() / 2);
-                ViewHelper.setPivotY(image, 0);
-                ViewHelper.setScaleX(image, scale);
-                ViewHelper.setScaleY(image, scale);
-                ViewHelper.setTranslationY(mSlidingTabLayout, mFlexibleSpaceHeight - mTabHeight + ptrIndicator.getCurrentPosY());
-                ViewHelper.setTranslationY(mTitleView, mFlexibleSpaceHeight - mTabHeight - mTileHeight + ptrIndicator.getCurrentPosY());
-            }
-        });
-    }
-
-    private boolean validPullSize(int pullSize) {
-        return pullSize <= MAX_PULL_DISTANCE;
-    }
-
-    private boolean canPull() {
-        return mCanPull && mPagerAdapter.checkCanDoRefresh();
-    }
 
     /**
      * Called by children Fragments when their scrollY are changed.
@@ -205,7 +117,7 @@ public class CloudMusicTabActivity extends BaseActivity {
             return;
         }
         if (scrollable == s) {
-            int adjustedScrollY = Math.min(scrollY, mFlexibleSpaceHeight - mTabHeight - mActionBarSize);
+            int adjustedScrollY = Math.min(scrollY, mFlexibleSpaceHeight - mTabHeight - mToolbarSize);
             mScrollY = adjustedScrollY;
             translateTab(adjustedScrollY, false);
             propagateScroll(adjustedScrollY);
@@ -217,11 +129,11 @@ public class CloudMusicTabActivity extends BaseActivity {
         View toolbar = findViewById(R.id.toolbar);
 
         // Translate overlay and image
-        int minImgTransitionY = mFlexibleSpaceHeight - mActionBarSize - mTabHeight;
+        int minImgTransitionY = mFlexibleSpaceHeight - mToolbarSize - mTabHeight;
         float alpha = ScrollUtils.getFloat((float) scrollY / minImgTransitionY, 0, 1);
         toolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, ContextCompat.getColor(this, R.color.colorPrimary)));
 //        StatusBarCompat.compat(this, ScrollUtils.getColorWithAlpha(alpha, ContextCompat.getColor(this, R.color.colorPrimaryDark)));
-        ViewHelper.setTranslationY(imageView, ScrollUtils.getFloat(-scrollY / 2, minImgTransitionY, 0));
+        ViewHelper.setTranslationY(imageView, ScrollUtils.getFloat(-scrollY / 2, -minImgTransitionY, 0));
 
         // Translate title text
         float titleTranslationY = ScrollUtils.getFloat(-scrollY + mFlexibleSpaceHeight - mTabHeight - mTileHeight, 0, mFlexibleSpaceHeight - mTabHeight - mTileHeight);
@@ -232,7 +144,7 @@ public class CloudMusicTabActivity extends BaseActivity {
         // If tabs are moving, cancel it to start a new animation.
         ViewPropertyAnimator.animate(mSlidingTabLayout).cancel();
         // Tabs will move between the top of the screen to the bottom of the image.
-        float tabTranslationY = ScrollUtils.getFloat(-scrollY + mFlexibleSpaceHeight - mTabHeight, mActionBarSize, mFlexibleSpaceHeight - mTabHeight);
+        float tabTranslationY = ScrollUtils.getFloat(-scrollY + mFlexibleSpaceHeight - mTabHeight, mToolbarSize, mFlexibleSpaceHeight - mTabHeight);
         if (animated) {
             // Animation will be invoked only when the current tab is changed.
             ViewPropertyAnimator.animate(mSlidingTabLayout)
@@ -280,63 +192,23 @@ public class CloudMusicTabActivity extends BaseActivity {
                 continue;
             }
             f.setScrollY(scrollY, mFlexibleSpaceHeight);
-            f.updateFlexibleSpace(scrollY);
+            f.updateBackGroundView(scrollY);
         }
     }
 
-    /**
-     * 记录viewpager每页滚动的具体位置
-     */
-    static class PageItemScrollState {
-        int[] items;
-        int size;
-        private static final int INVALID = -1;
+    @Override
+    public void onPull(PtrIndicator ptrIndicator) {
+        float scale = (float) (ptrIndicator.getCurrentPosY() + mFlexibleSpaceHeight) / mFlexibleSpaceHeight;
+        ViewHelper.setPivotX(image, image.getWidth() / 2);
+        ViewHelper.setPivotY(image, 0);
+        ViewHelper.setScaleX(image, scale);
+        ViewHelper.setScaleY(image, scale);
+        ViewHelper.setTranslationY(mSlidingTabLayout, mFlexibleSpaceHeight - mTabHeight + ptrIndicator.getCurrentPosY());
+        ViewHelper.setTranslationY(mTitleView, mFlexibleSpaceHeight - mTabHeight - mTileHeight + ptrIndicator.getCurrentPosY());
+    }
 
-        PageItemScrollState() {
-            this(0);
-        }
-
-        PageItemScrollState(int size) {
-            this.size = size;
-            items = new int[size];
-        }
-
-        void updateSize(int size) {
-            if (this.size != size && size >= 0) {
-                this.size = size;
-                items = new int[size];
-            } else {
-                try {
-                    throw new Exception();
-                } catch (Exception e) {
-                    Log.e(TAG, "updateSize: update size failed!size=" + size);
-                }
-            }
-        }
-
-        int getItem(int pos) {
-            if (positionValid(pos))
-                return items[pos];
-            return INVALID;
-        }
-
-        void updateItem(int pos, int value) {
-            if (positionValid(pos)) {
-                items[pos] = value;
-            }
-        }
-
-        boolean positionValid(int pos) {
-            return pos < size && pos >= 0;
-        }
-
-        void refreshData() {
-            if (items == null)
-                return;
-            for (int i = 0; i < size; i++) {
-                items[i] = 0;
-            }
-        }
+    public boolean checkCanDoRefresh() {
+        return mScrollY == 0;
     }
 
     /**
@@ -348,12 +220,10 @@ public class CloudMusicTabActivity extends BaseActivity {
         private static final String[] TITLES = new String[]{"Applepie", "Butter Cookie", "Cupcake"};
         //{"Applepie", "Butter Cookie", "Cupcake", "Donut", "Eclair", "Froyo", "Gingerbread", "Honeycomb", "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop"};
 
-        private PageItemScrollState mStates;
         private int mScrollY;
 
         NavigationAdapter(FragmentManager fm) {
             super(fm);
-            mStates = new PageItemScrollState(TITLES.length);
         }
 
         void setScrollY(int scrollY) {
@@ -363,26 +233,7 @@ public class CloudMusicTabActivity extends BaseActivity {
         @Override
         protected Fragment createItem(int position) {
             FlexibleSpaceWithImageBaseFragment f;
-//            final int pattern = position % 4;
-//            switch (pattern) {
-//                case 0: {
-//                    f = new FlexibleSpaceWithImageScrollViewFragment();
-//                    break;
-//                }
-//                case 1: {
-//                    f = new FlexibleSpaceWithImageListViewFragment();
-//                    break;
-//                }
-//                case 2: {
             f = new FlexibleSpaceWithImageRecyclerViewFragment();
-//                    break;
-//                }
-//                case 3:
-//                default: {
-//                    f = new FlexibleSpaceWithImageRecyclerViewFragment();
-//                    break;
-//                }
-//            }
             f.setArguments(mScrollY, position);
             return f;
         }
@@ -397,19 +248,8 @@ public class CloudMusicTabActivity extends BaseActivity {
             return TITLES[position];
         }
 
-        boolean checkCanDoRefresh() {
-            return mScrollY == 0;
-        }
-
-        int getItemScrollY(int pos) {
-            return mStates.getItem(pos);
-        }
-
-        void updateItemScrollY(int pos, int value) {
-            mStates.updateItem(pos, value);
-        }
-
     }
+
 
     public int getScrollY() {
         return mScrollY;

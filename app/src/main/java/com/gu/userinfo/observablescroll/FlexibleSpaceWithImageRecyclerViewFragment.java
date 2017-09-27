@@ -31,11 +31,12 @@ import com.nineoldandroids.view.ViewHelper;
 
 public class FlexibleSpaceWithImageRecyclerViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableRecyclerView> {
     private static final String TAG = "TAG";
+    private boolean first = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_flexiblespacewithimagerecyclerview, container, false);
-        final ObservableRecyclerView recyclerView = (ObservableRecyclerView) view.findViewById(R.id.scroll);
+        final ObservableRecyclerView recyclerView = view.findViewById(R.id.scroll);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(false);
         final View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.recycler_header, container, false);
@@ -46,44 +47,24 @@ public class FlexibleSpaceWithImageRecyclerViewFragment extends FlexibleSpaceWit
         // TouchInterceptionViewGroup should be a parent view other than ViewPager.
         // This is a workaround for the issue #117:
         // https://github.com/ksoichiro/Android-ObservableScrollView/issues/117
-        recyclerView.setTouchInterceptionViewGroup((ViewGroup) view.findViewById(R.id.fragment_root));
-
+        recyclerView.setTouchInterceptionViewGroup(view.findViewById(R.id.fragment_root));
+        int scrollY = ((CloudMusicTabActivity) getActivity()).getScrollY();
         // Scroll to the specified offset after layout
-        performScroll(view, recyclerView);
-
+        recoveryScrollState(recyclerView, scrollY);
+        updateFlexibleSpace(scrollY, view);
         recyclerView.setScrollViewCallbacks(this);
-
         return view;
     }
 
-    private void performScroll(final View parent, final ObservableRecyclerView recyclerView) {
-//        Bundle args = getArguments();
-//        if (args != null && args.containsKey(ARG_SCROLL_Y)) {
-        final int scrollY = ((CloudMusicTabActivity) getActivity()).getScrollY();
-        ScrollUtils.addOnGlobalLayoutListener(recyclerView, new Runnable() {
-            @Override
-            public void run() {
-                int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
-                int offset = scrollY % flexibleSpaceImageHeight;
-                RecyclerView.LayoutManager lm = recyclerView.getLayoutManager();
-                if (lm != null && lm instanceof LinearLayoutManager) {
-                    ((LinearLayoutManager) lm).scrollToPositionWithOffset(0, -offset);
-//                        updateBackGroundView(parent, scrollY);
-                }
+    private void recoveryScrollState(final ObservableRecyclerView recyclerView, int scrollY) {
+        ScrollUtils.addOnGlobalLayoutListener(recyclerView, () -> {
+            int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
+            int offset = scrollY % flexibleSpaceImageHeight;
+            RecyclerView.LayoutManager lm = recyclerView.getLayoutManager();
+            if (lm != null && lm instanceof LinearLayoutManager) {
+                ((LinearLayoutManager) lm).scrollToPositionWithOffset(0, -offset);
             }
         });
-        View recyclerViewBackground = parent.findViewById(R.id.list_background);
-        ScrollUtils.addOnGlobalLayoutListener(recyclerViewBackground, new Runnable() {
-            @Override
-            public void run() {
-                updateBackGroundView(parent, scrollY);
-            }
-        });
-        updateFlexibleSpace(scrollY, parent);
-//        } else {
-//            Log.e(TAG, "performScroll: ---------------------------args != null----");
-//            updateFlexibleSpace(0, parent);
-//        }
     }
 
     @Override
@@ -114,19 +95,23 @@ public class FlexibleSpaceWithImageRecyclerViewFragment extends FlexibleSpaceWit
 
     @Override
     protected void updateFlexibleSpace(int scrollY, View view) {
-
-        updateBackGroundView(view, scrollY);
+        if (first) {
+            first = false;
+            return;
+        }
+        updateBackGroundView(scrollY);
         // Also pass this event to parent Activity
         CloudMusicTabActivity parentActivity =
                 (CloudMusicTabActivity) getActivity();
         if (parentActivity != null) {
-            parentActivity.onScrollChanged(scrollY, (ObservableRecyclerView) view.findViewById(R.id.scroll));
+            parentActivity.onScrollChanged(scrollY, view.findViewById(R.id.scroll));
         }
     }
 
-    private void updateBackGroundView(View parent, int scrollY) {
+    @Override
+    protected void updateBackGroundView(int scrollY) {
         int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
-        View recyclerViewBackground = parent.findViewById(R.id.list_background);
+        View recyclerViewBackground = getView().findViewById(R.id.list_background);
         ViewHelper.setTranslationY(recyclerViewBackground, Math.max(0, -scrollY + flexibleSpaceImageHeight));
     }
 }
