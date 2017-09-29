@@ -1,7 +1,9 @@
-package com.gu.userinfo.observablescroll;
+package com.gu.userinfo.observablescroll.backup;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.gu.userinfo.observablescroll.R;
 
 public class MainActivity extends AppCompatActivity {
 

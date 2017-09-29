@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll;
+package com.gu.userinfo.observablescroll.backup;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import com.gu.observableviewlibrary.ObservableScrollView;
 import com.gu.observableviewlibrary.ScrollUtils;
 import com.gu.observableviewlibrary.Scrollable;
+import com.gu.userinfo.observablescroll.R;
 import com.gu.userinfo.observablescroll.cloudmusic.CloudMusicTabActivity;
 
 

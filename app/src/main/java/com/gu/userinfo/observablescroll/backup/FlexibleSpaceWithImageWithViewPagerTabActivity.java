@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll;
+package com.gu.userinfo.observablescroll.backup;
 
 import android.annotation.TargetApi;
 import android.content.res.Configuration;
@@ -29,6 +29,8 @@ import android.widget.TextView;
 import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
 import com.gu.observableviewlibrary.ScrollUtils;
 import com.gu.observableviewlibrary.Scrollable;
+import com.gu.userinfo.observablescroll.BaseActivity;
+import com.gu.userinfo.observablescroll.R;
 import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
@@ -257,7 +259,7 @@ public class FlexibleSpaceWithImageWithViewPagerTabActivity extends BaseActivity
                 continue;
             }
             f.setScrollY(scrollY, mFlexibleSpaceHeight);
-            f.updateBackGroundView(scrollY);
+            f.updateScrollableMaskView(scrollY);
         }
     }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll;
+package com.gu.userinfo.observablescroll.backup;
 
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +22,8 @@ import android.view.View;
 import com.gu.observableviewlibrary.ObservableScrollViewCallbacks;
 import com.gu.observableviewlibrary.ScrollState;
 import com.gu.observableviewlibrary.Scrollable;
+import com.gu.userinfo.observablescroll.BaseFragment;
+import com.gu.userinfo.observablescroll.R;
 
 
 public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> extends BaseFragment
@@ -87,7 +89,7 @@ public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> e
         updateFlexibleSpace(scrollY, getView());
     }
 
-    public void updateBackGroundView(int scrollY) {
+    public void updateScrollableMaskView(int scrollY) {
     }
 
     public abstract void updateFlexibleSpace(int scrollY, View view);

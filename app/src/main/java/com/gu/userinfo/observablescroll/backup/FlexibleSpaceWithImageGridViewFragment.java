@@ -14,57 +14,57 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll;
+package com.gu.userinfo.observablescroll.backup;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
+import android.widget.FrameLayout;
 
-import com.gu.observableviewlibrary.ObservableListView;
+import com.gu.observableviewlibrary.ObservableGridView;
 import com.gu.observableviewlibrary.ScrollUtils;
+import com.gu.userinfo.observablescroll.R;
 import com.gu.userinfo.observablescroll.cloudmusic.CloudMusicTabActivity;
 import com.nineoldandroids.view.ViewHelper;
 
-public class FlexibleSpaceWithImageListViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableListView> {
+public class FlexibleSpaceWithImageGridViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableGridView> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_flexiblespacewithimagelistview, container, false);
+        View view = inflater.inflate(R.layout.fragment_flexiblespacewithimagegridview, container, false);
 
-        final ObservableListView listView = (ObservableListView) view.findViewById(R.id.scroll);
-        // Set padding view for ListView. This is the flexible space.
+        final ObservableGridView gridView = view.findViewById(R.id.scroll);
+        // Set padding view for GridView. This is the flexible space.
         View paddingView = new View(getActivity());
         final int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
-        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT,
-            flexibleSpaceImageHeight);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                flexibleSpaceImageHeight);
         paddingView.setLayoutParams(lp);
 
         // This is required to disable header's list selector effect
         paddingView.setClickable(true);
 
-        listView.addHeaderView(paddingView);
-        setDummyData(listView);
+        gridView.addHeaderView(paddingView);
+        setDummyData(gridView);
         // TouchInterceptionViewGroup should be a parent view other than ViewPager.
         // This is a workaround for the issue #117:
         // https://github.com/ksoichiro/Android-ObservableScrollView/issues/117
-        listView.setTouchInterceptionViewGroup((ViewGroup) view.findViewById(R.id.fragment_root));
+        gridView.setTouchInterceptionViewGroup((ViewGroup) view.findViewById(R.id.fragment_root));
 
         // Scroll to the specified offset after layout
         Bundle args = getArguments();
         if (args != null && args.containsKey(ARG_SCROLL_Y)) {
-//            final int scrollY = args.getInt(ARG_SCROLL_Y, 0);
-            final int scrollY = ((CloudMusicTabActivity) getActivity()).getScrollY();
-            Log.e("TAG", "listview scrolly= " + scrollY);
-            ScrollUtils.addOnGlobalLayoutListener(listView, new Runnable() {
+            final int scrollY = args.getInt(ARG_SCROLL_Y, 0);
+            ScrollUtils.addOnGlobalLayoutListener(gridView, new Runnable() {
                 @SuppressLint("NewApi")
                 @Override
                 public void run() {
                     int offset = scrollY % flexibleSpaceImageHeight;
-                    listView.setSelectionFromTop(0, -offset);
+                    setSelectionFromTop(gridView, 0, -offset);
                 }
             });
             updateFlexibleSpace(scrollY, view);
@@ -72,7 +72,7 @@ public class FlexibleSpaceWithImageListViewFragment extends FlexibleSpaceWithIma
             updateFlexibleSpace(0, view);
         }
 
-        listView.setScrollViewCallbacks(this);
+        gridView.setScrollViewCallbacks(this);
 
         updateFlexibleSpace(0, view);
 
@@ -86,11 +86,11 @@ public class FlexibleSpaceWithImageListViewFragment extends FlexibleSpaceWithIma
         if (view == null) {
             return;
         }
-        ObservableListView listView = (ObservableListView) view.findViewById(R.id.scroll);
-        if (listView == null) {
+        ObservableGridView gridView = (ObservableGridView) view.findViewById(R.id.scroll);
+        if (gridView == null) {
             return;
         }
-        View firstVisibleChild = listView.getChildAt(0);
+        View firstVisibleChild = gridView.getChildAt(0);
         if (firstVisibleChild != null) {
             int offset = scrollY;
             int position = 0;
@@ -99,7 +99,7 @@ public class FlexibleSpaceWithImageListViewFragment extends FlexibleSpaceWithIma
                 position = scrollY / baseHeight;
                 offset = scrollY % baseHeight;
             }
-            listView.setSelectionFromTop(position, -offset);
+            setSelectionFromTop(gridView, position, -offset);
         }
     }
 
@@ -108,14 +108,30 @@ public class FlexibleSpaceWithImageListViewFragment extends FlexibleSpaceWithIma
         int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
 
         View listBackgroundView = view.findViewById(R.id.list_background);
+
         // Translate list background
         ViewHelper.setTranslationY(listBackgroundView, Math.max(0, -scrollY + flexibleSpaceImageHeight));
 
         // Also pass this event to parent Activity
-        FlexibleSpaceWithImageWithViewPagerTabActivity parentActivity =
-            (FlexibleSpaceWithImageWithViewPagerTabActivity) getActivity();
+        CloudMusicTabActivity parentActivity =
+                (CloudMusicTabActivity) getActivity();
         if (parentActivity != null) {
-            parentActivity.onScrollChanged(scrollY, (ObservableListView) view.findViewById(R.id.scroll));
+            parentActivity.onScrollChanged(scrollY, (ObservableGridView) view.findViewById(R.id.scroll));
+        }
+    }
+
+    /*
+     * setSelectionFromTop method has been moved from ListView to AbsListView since API level 21,
+     * so for API level 21-, we need to use other method to scroll with offset.
+     * smoothScrollToPositionFromTop seems to work, but it's from API level 11.
+     * We can't use GridView for Gingerbread.
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setSelectionFromTop(ObservableGridView gridView, int position, int offset) {
+        if (Build.VERSION_CODES.LOLLIPOP <= Build.VERSION.SDK_INT) {
+            gridView.setSelectionFromTop(position, offset);
+        } else if (Build.VERSION_CODES.HONEYCOMB <= Build.VERSION.SDK_INT) {
+            gridView.smoothScrollToPositionFromTop(position, offset, 0);
         }
     }
 }

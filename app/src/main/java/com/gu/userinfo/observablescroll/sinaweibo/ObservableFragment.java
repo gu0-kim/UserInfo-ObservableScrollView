@@ -28,6 +28,12 @@ public abstract class ObservableFragment extends BaseFragment
         super.onDetach();
     }
 
+    /**
+     * scrollableview滚动时回调
+     * @param scrollY     Scroll position in Y axis.
+     * @param firstScroll True when this is called for the first time in the consecutive motion events.
+     * @param dragging    True when the view is dragged and false when the view is scrolled in the inertia.
+     */
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         if (getView() == null) {

@@ -33,8 +33,7 @@ import android.widget.TextView;
 import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
 import com.gu.observableviewlibrary.ScrollUtils;
 import com.gu.observableviewlibrary.Scrollable;
-import com.gu.userinfo.observablescroll.FlexibleSpaceWithImageBaseFragment;
-import com.gu.userinfo.observablescroll.FlexibleSpaceWithImageRecyclerViewFragment;
+import com.gu.userinfo.observablescroll.backup.FlexibleSpaceWithImageBaseFragment;
 import com.gu.userinfo.observablescroll.R;
 import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
 import com.nineoldandroids.view.ViewHelper;
@@ -72,6 +71,7 @@ public class CloudMusicTabActivity extends PtrActivity {
         setSupportActionBar(toolbar);
         mPagerAdapter = new NavigationAdapter(getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
+        //只缓存1页
         mPager.setOffscreenPageLimit(1);
         mPager.setAdapter(mPagerAdapter);
 
@@ -175,10 +175,7 @@ public class CloudMusicTabActivity extends PtrActivity {
     }
 
     private void propagateScroll(int scrollY) {
-        // Set scrollY for the fragments that are not created yet
-        mPagerAdapter.setScrollY(scrollY);
 
-        // Set scrollY for the active fragments
         for (int i = 0; i < mPagerAdapter.getCount(); i++) {
             // Skip current item
             if (i == mPager.getCurrentItem()) {
@@ -197,7 +194,7 @@ public class CloudMusicTabActivity extends PtrActivity {
                 continue;
             }
             f.setScrollY(scrollY, mFlexibleSpaceHeight);
-            f.updateBackGroundView(scrollY);
+            f.updateScrollableMaskView(scrollY);
         }
     }
 
@@ -225,21 +222,15 @@ public class CloudMusicTabActivity extends PtrActivity {
         private static final String[] TITLES = new String[]{"Applepie", "Butter Cookie", "Cupcake"};
         //{"Applepie", "Butter Cookie", "Cupcake", "Donut", "Eclair", "Froyo", "Gingerbread", "Honeycomb", "Ice Cream Sandwich", "Jelly Bean", "KitKat", "Lollipop"};
 
-        private int mScrollY;
-
         NavigationAdapter(FragmentManager fm) {
             super(fm);
-        }
-
-        void setScrollY(int scrollY) {
-            mScrollY = scrollY;
         }
 
         @Override
         protected Fragment createItem(int position) {
             FlexibleSpaceWithImageBaseFragment f;
-            f = new FlexibleSpaceWithImageRecyclerViewFragment();
-            f.setArguments(mScrollY, position);
+            f = new CloudMusicRecyclerViewFragment();
+            f.setName(position);
             return f;
         }
 
@@ -254,7 +245,6 @@ public class CloudMusicTabActivity extends PtrActivity {
         }
 
     }
-
 
     public int getScrollY() {
         return mScrollY;
