@@ -17,7 +17,8 @@ allprojects {
         jcenter()
     }
 }
-
+//def apk_output="./apk"
 task clean(type: Delete) {
     delete rootProject.buildDir
+//    delete apk_output
 }

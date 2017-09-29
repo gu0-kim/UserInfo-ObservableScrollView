@@ -70,6 +70,7 @@ dependencies {
 android.applicationVariants.all { variant ->
 
     variant.outputs.each { output ->
+        println "原始文件名： " + output.outputFile.name
         def outputFile = output.outputFile
         if (outputFile != null && outputFile.name.endsWith('.apk')) {
             def fileName = outputFile.name;
@@ -93,3 +94,40 @@ android.applicationVariants.all { variant ->
         }
     }
 }
+
+
+def apk_output="../apk/"
+clean{
+    delete apk_output
+}
+//build {
+//    doLast {
+//        def fileName = "app-release.apk"
+//        def fromFile = "./build/outputs/apk/" + fileName
+//        def intoFile = "../apk/"
+//
+//
+//        def applicationId = android.defaultConfig.applicationId
+//        def versionName = android.defaultConfig.versionName
+//        def time = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
+//        def buildType = "realse"
+//        def channel = "site"
+//
+//
+//        def appName = "${applicationId}_v${versionName}_${time}_${buildType}_${channel}.apk"
+//
+//
+//        // copy --> rename
+//        copy {
+//            from fromFile
+//            into intoFile
+//
+//
+//            rename {
+//                appName
+//            }
+//        }
+//
+//        println("=====================build.doLast success.=========================")
+//    }
+//}
