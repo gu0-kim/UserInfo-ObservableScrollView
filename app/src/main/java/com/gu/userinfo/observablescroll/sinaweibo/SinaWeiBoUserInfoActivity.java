@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
 import com.gu.observableviewlibrary.ScrollUtils;
-import com.gu.observableviewlibrary.Scrollable;
 import com.gu.userinfo.observablescroll.R;
 import com.gu.userinfo.observablescroll.cloudmusic.PtrActivity;
 import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
@@ -71,41 +70,20 @@ public class SinaWeiBoUserInfoActivity extends PtrActivity {
         initPtrLayout();
     }
 
-    public void onScrollChanged(int scrollY, int deltaY, Scrollable s) {
-
-        UserInfoRecyclerViewFragment fragment =
-                (UserInfoRecyclerViewFragment) mPagerAdapter.getItemAt(mPager.getCurrentItem());
-        if (fragment == null) {
-            Log.e(TAG, "onScrollChanged: -----fragment == null");
-            return;
-        }
-        View view = fragment.getView();
-        if (view == null) {
-            Log.e(TAG, "onScrollChanged: -----view == null");
-            return;
-        }
-        Scrollable scrollable = view.findViewById(R.id.scroll);
-        if (scrollable == null) {
-            Log.e(TAG, "onScrollChanged: -----scrollable == null");
-            return;
-        }
-        if (scrollable == s) {
-            if (deltaY > 0) {
-                //手向上滑动
-                int adjustedScrollY = Math.min(mFrontViewScrollY + deltaY, mFlexibleSpaceHeight - mTabHeight - mToolbarSize);
-                translateTab(adjustedScrollY, false);
-                propagateScroll(adjustedScrollY - mFrontViewScrollY);
-                mFrontViewScrollY = adjustedScrollY;
-            } else {
-                //手向下滑动
-                if (scrollY < mFrontViewScrollY) {
-                    translateTab(scrollY, false);
-                    propagateScroll(scrollY - mFrontViewScrollY);
-                    mFrontViewScrollY = scrollY;
-                }
+    public void onScrollChanged(int scrollY, int deltaY) {
+        if (deltaY > 0) {
+            //手向上滑动
+            int adjustedScrollY = Math.min(mFrontViewScrollY + deltaY, mFlexibleSpaceHeight - mTabHeight - mToolbarSize);
+            translateTab(adjustedScrollY, false);
+            propagateScroll(adjustedScrollY - mFrontViewScrollY);
+            mFrontViewScrollY = adjustedScrollY;
+        } else {
+            //手向下滑动
+            if (scrollY < mFrontViewScrollY) {
+                translateTab(scrollY, false);
+                propagateScroll(scrollY - mFrontViewScrollY);
+                mFrontViewScrollY = scrollY;
             }
-
-
         }
     }
 

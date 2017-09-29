@@ -90,7 +90,7 @@ public class UserInfoRecyclerViewFragment extends ObservableFragment {
         SinaWeiBoUserInfoActivity parentActivity =
                 (SinaWeiBoUserInfoActivity) getActivity();
         if (parentActivity != null) {
-            parentActivity.onScrollChanged(scrollY, scrollY - mScrollY, view.findViewById(R.id.scroll));
+            parentActivity.onScrollChanged(scrollY, scrollY - mScrollY);
         }
         mScrollY = scrollY;
     }
