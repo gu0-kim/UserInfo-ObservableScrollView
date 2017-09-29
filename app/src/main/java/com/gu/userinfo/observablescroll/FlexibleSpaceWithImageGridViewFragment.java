@@ -27,6 +27,7 @@ import android.widget.FrameLayout;
 
 import com.gu.observableviewlibrary.ObservableGridView;
 import com.gu.observableviewlibrary.ScrollUtils;
+import com.gu.userinfo.observablescroll.cloudmusic.CloudMusicTabActivity;
 import com.nineoldandroids.view.ViewHelper;
 
 public class FlexibleSpaceWithImageGridViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableGridView> {
@@ -102,7 +103,7 @@ public class FlexibleSpaceWithImageGridViewFragment extends FlexibleSpaceWithIma
     }
 
     @Override
-    protected void updateFlexibleSpace(int scrollY, View view) {
+    public void updateFlexibleSpace(int scrollY, View view) {
         int flexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
 
         View listBackgroundView = view.findViewById(R.id.list_background);

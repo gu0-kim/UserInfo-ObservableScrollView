@@ -9,12 +9,6 @@ android {
             storeFile file('C:\\Users\\devel\\save_key\\debug.keystore')
             storePassword 'android'
         }
-        debug {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('C:\\Users\\devel\\save_key\\debug.keystore')
-            storePassword 'android'
-        }
     }
 
     compileSdkVersion 26
@@ -57,18 +51,21 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:' + appcompatv7_version
     //
+    //注意customBuildTypeCompile的写法和Build Variants中的customBuildType对应
+    customBuildTypeCompile project(':observableviewlibrary')
+    releaseCompile project(':observableviewlibrary')
+    //    compile 'com.gu:observablescrollview:1.0.0'
+    //    compile project(':observableviewlibrary')
+    debugCompile project(':observableviewlibrary')
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.developergu:statusbarcolortools:1.0.0'
-    //注意customBuildTypeCompile的写法和Build Variants中的customBuildType对应
-    customBuildTypeCompile project(':observableviewlibrary')
-    debugCompile 'com.gu:observablescrollview:1.0.0'
-    releaseCompile project(':observableviewlibrary')
-    //    compile 'com.gu:observablescrollview:1.0.0'
+    compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
-//    compile project(':observableviewlibrary')
 }
+
+
 
 android.applicationVariants.all { variant ->
 

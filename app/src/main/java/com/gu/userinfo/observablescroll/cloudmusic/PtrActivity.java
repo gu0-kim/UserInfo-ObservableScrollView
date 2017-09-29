@@ -1,6 +1,9 @@
-package com.gu.userinfo.observablescroll;
+package com.gu.userinfo.observablescroll.cloudmusic;
 
 import android.view.View;
+
+import com.gu.userinfo.observablescroll.BaseActivity;
+import com.gu.userinfo.observablescroll.R;
 
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -26,7 +29,7 @@ public abstract class PtrActivity extends BaseActivity {
         ptrFrame.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                frame.postDelayed(ptrFrame::refreshComplete, 1800);
+                frame.postDelayed(ptrFrame::refreshComplete, 800);
             }
 
             @Override

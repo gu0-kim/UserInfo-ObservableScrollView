@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll;
+package com.gu.userinfo.observablescroll.cloudmusic;
 
 import android.annotation.TargetApi;
 import android.content.res.Configuration;
@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +33,9 @@ import android.widget.TextView;
 import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
 import com.gu.observableviewlibrary.ScrollUtils;
 import com.gu.observableviewlibrary.Scrollable;
+import com.gu.userinfo.observablescroll.FlexibleSpaceWithImageBaseFragment;
+import com.gu.userinfo.observablescroll.FlexibleSpaceWithImageRecyclerViewFragment;
+import com.gu.userinfo.observablescroll.R;
 import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
@@ -57,6 +61,7 @@ public class CloudMusicTabActivity extends PtrActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("TAG", "onCreate: CloudMusicTabActivity-----");
         setContentView(R.layout.cloud_music_main_activity);
         image = (ImageView) findViewById(R.id.image);
         mTileHeight = getActionBarSize();

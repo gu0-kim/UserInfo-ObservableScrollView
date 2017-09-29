@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import com.gu.observableviewlibrary.ObservableScrollView;
 import com.gu.observableviewlibrary.ScrollUtils;
 import com.gu.observableviewlibrary.Scrollable;
+import com.gu.userinfo.observablescroll.cloudmusic.CloudMusicTabActivity;
 
 
 public class FlexibleSpaceWithImageScrollViewFragment extends FlexibleSpaceWithImageBaseFragment<ObservableScrollView> {
@@ -59,7 +60,7 @@ public class FlexibleSpaceWithImageScrollViewFragment extends FlexibleSpaceWithI
     }
 
     @Override
-    protected void updateFlexibleSpace(int scrollY) {
+    public void updateFlexibleSpace(int scrollY) {
         // Sometimes scrollable.getCurrentScrollY() and the real scrollY has different values.
         // As a workaround, we should call scrollVerticallyTo() to make sure that they match.
         Scrollable s = getScrollable();
@@ -72,7 +73,7 @@ public class FlexibleSpaceWithImageScrollViewFragment extends FlexibleSpaceWithI
     }
 
     @Override
-    protected void updateFlexibleSpace(int scrollY, View view) {
+    public void updateFlexibleSpace(int scrollY, View view) {
         ObservableScrollView scrollView = (ObservableScrollView) view.findViewById(R.id.scroll);
 
         // Also pass this event to parent Activity

@@ -17,7 +17,6 @@
 package com.gu.userinfo.observablescroll;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.gu.observableviewlibrary.ObservableScrollViewCallbacks;
@@ -47,6 +46,12 @@ public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> e
             args.putInt(ARG_FRAGMENT_NAME, name);
             setArguments(args);
         }
+    }
+
+    public void setName(int name) {
+        Bundle args = new Bundle();
+        args.putInt(ARG_FRAGMENT_NAME, name);
+        setArguments(args);
     }
 
     public int getName() {
@@ -82,10 +87,10 @@ public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> e
         updateFlexibleSpace(scrollY, getView());
     }
 
-    protected void updateBackGroundView(int scrollY) {
+    public void updateBackGroundView(int scrollY) {
     }
 
-    protected abstract void updateFlexibleSpace(int scrollY, View view);
+    public abstract void updateFlexibleSpace(int scrollY, View view);
 
     @Override
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
@@ -104,11 +109,11 @@ public abstract class FlexibleSpaceWithImageBaseFragment<S extends Scrollable> e
     @Override
     public final void onUpOrCancelMotionEvent(ScrollState scrollState) {
         // We don't use this callback in this pattern.
-        Log.e(TAG, "---onUpOrCancelMotionEvent: " + scrollState);
     }
 
     protected S getScrollable() {
         View view = getView();
         return view == null ? null : (S) view.findViewById(R.id.scroll);
     }
+
 }
