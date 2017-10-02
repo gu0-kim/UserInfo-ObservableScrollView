@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-
     signingConfigs {
         release {
             keyAlias 'androiddebugkey'
@@ -10,7 +9,6 @@ android {
             storePassword 'android'
         }
     }
-
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
@@ -30,17 +28,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-        customBuildType {
+        customRelease {
             signingConfig signingConfigs.release
-            minifyEnabled false
-            applicationIdSuffix 'gu'
-            versionNameSuffix '1.0.1'
-            proguardFile 'C:/Users/devel/AndroidStudioProjects/UserInfo-ObservableScrollView/app/proguard-rules.pro'
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    productFlavors {
+        flavor {
+            minSdkVersion 14
+            applicationId 'com.gu.userinfo.observablemaster'
+            targetSdkVersion 26
+            versionCode 1
+            versionName '1.0'
+        }
     }
 }
 
@@ -51,11 +54,10 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:' + appcompatv7_version
     //
-    //注意customBuildTypeCompile的写法和Build Variants中的customBuildType对应
-    customBuildTypeCompile project(':observableviewlibrary')
-    releaseCompile project(':observableviewlibrary')
+    //注意customReleaseCompile的写法和Build Variants中的customRelease对应
     //    compile 'com.gu:observablescrollview:1.0.0'
-    //    compile project(':observableviewlibrary')
+    customReleaseCompile project(':observableviewlibrary')
+    releaseCompile project(':observableviewlibrary')
     debugCompile project(':observableviewlibrary')
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
@@ -74,14 +76,14 @@ android.applicationVariants.all { variant ->
         def outputFile = output.outputFile
         if (outputFile != null && outputFile.name.endsWith('.apk')) {
             def fileName = outputFile.name;
-            if (android.defaultConfig.versionName != null) {
-                fileName = fileName.replace(".apk", "-${android.defaultConfig.versionName}.apk")
-            }
-            if (project.hasProperty('OUT_PUT_APK_SUFFIX_PARA')) {
-                fileName = fileName.replace(".apk", "-${OUT_PUT_APK_SUFFIX_PARA}.apk")
-            }
-            def today = new Date().format('yyMMddHHmm');
-            fileName = fileName.replace(".apk", "-${today}.apk")
+//            if (android.defaultConfig.versionName != null) {
+//                fileName = fileName.replace(".apk", "-${android.defaultConfig.versionName}.apk")
+//            }
+//            if (project.hasProperty('OUT_PUT_APK_SUFFIX_PARA')) {
+//                fileName = fileName.replace(".apk", "-${OUT_PUT_APK_SUFFIX_PARA}.apk")
+//            }
+//            def today = new Date().format('yyMMddHHmm');
+//            fileName = fileName.replace(".apk", "-${today}.apk")
             if (project.hasProperty('OUT_PUT_DIR_PARA')) {
                 File output_dir1 = file("${OUT_PUT_DIR_PARA}");
                 output.outputFile = new File(output_dir1, fileName)
@@ -96,8 +98,8 @@ android.applicationVariants.all { variant ->
 }
 
 
-def apk_output="../apk/"
-clean{
+def apk_output = "../apk/"
+clean {
     delete apk_output
 }
 //build {

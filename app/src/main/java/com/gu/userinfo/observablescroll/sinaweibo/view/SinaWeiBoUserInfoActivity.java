@@ -1,4 +1,4 @@
-package com.gu.userinfo.observablescroll.sinaweibo;
+package com.gu.userinfo.observablescroll.sinaweibo.view;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,15 +13,18 @@ import android.widget.Toast;
 
 import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
 import com.gu.observableviewlibrary.ScrollUtils;
+import com.gu.userinfo.observablescroll.BaseActivity;
 import com.gu.userinfo.observablescroll.R;
-import com.gu.userinfo.observablescroll.cloudmusic.PtrActivity;
+import com.gu.userinfo.observablescroll.sinaweibo.presenter.BasePresenter;
+import com.gu.userinfo.observablescroll.sinaweibo.presenter.WeiboPresenter;
 import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.indicator.PtrIndicator;
 
-public class SinaWeiBoUserInfoActivity extends PtrActivity {
+public class SinaWeiBoUserInfoActivity extends BaseActivity implements BaseView {
 
     private ImageView image;
     private int mFlexibleSpaceHeight;
@@ -33,6 +36,9 @@ public class SinaWeiBoUserInfoActivity extends PtrActivity {
     private NavigationAdapter mPagerAdapter;
     private int mFrontViewScrollY;
     public static final String TAG = "TAG";
+
+    private static final int MAX_PULL_DISTANCE = 200;
+    private BasePresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,28 +73,58 @@ public class SinaWeiBoUserInfoActivity extends PtrActivity {
             mToolbarSize = toolbar.getHeight();
             translateTab(0, false);
         });
-        initPtrLayout();
+        mPresenter = new WeiboPresenter(this);
+        mPresenter.onInit();
     }
 
-    public void onScrollChanged(int scrollY, int deltaY) {
-        if (deltaY > 0) {
-            //手向上滑动
-            int adjustedScrollY = Math.min(mFrontViewScrollY + deltaY, mFlexibleSpaceHeight - mTabHeight - mToolbarSize);
-            translateTab(adjustedScrollY, false);
-            propagateScroll(adjustedScrollY - mFrontViewScrollY);
-            mFrontViewScrollY = adjustedScrollY;
-        } else {
-            //手向下滑动
-            if (scrollY < mFrontViewScrollY) {
-                translateTab(scrollY, false);
-                propagateScroll(scrollY - mFrontViewScrollY);
-                mFrontViewScrollY = scrollY;
-            }
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
+        mPresenter = null;
     }
 
+    @Override
+    public BasePresenter getPresenter() {
+        return mPresenter;
+    }
 
-    private void propagateScroll(int deltaY) {
+    @Override
+    public void onInit(BasePresenter presenter) {
+        final PtrClassicFrameLayout ptrFrame = (PtrClassicFrameLayout) findViewById(R.id.pager_wrapper);
+        ptrFrame.disableWhenHorizontalMove(true);
+        ptrFrame.getHeader().setVisibility(View.INVISIBLE);
+        ptrFrame.setPtrHandler((WeiboPresenter) presenter);
+        ptrFrame.addPtrUIHandler((WeiboPresenter) presenter);
+    }
+
+    /**
+     * Front view move up
+     *
+     * @param deltaY scroll others by deltaY when currentItem moves up.
+     */
+    @Override
+    public void moveUp(int deltaY) {
+        int adjustedScrollY = Math.min(mFrontViewScrollY + deltaY, mFlexibleSpaceHeight - mTabHeight - mToolbarSize);
+        translateTab(adjustedScrollY, false);
+        propagateScroll(adjustedScrollY - mFrontViewScrollY);
+        mFrontViewScrollY = adjustedScrollY;
+    }
+
+    @Override
+    public void moveDown(int scrollY) {
+        translateTab(scrollY, false);
+        propagateScroll(scrollY - mFrontViewScrollY);
+        mFrontViewScrollY = scrollY;
+    }
+
+    @Override
+    public boolean needMoveDown(int scrollY) {
+        return scrollY < mFrontViewScrollY;
+    }
+
+    @Override
+    public void propagateScroll(int deltaY) {
 
         // Set scrollY for the active fragments
         for (int i = 0; i < mPagerAdapter.getCount(); i++) {
@@ -113,7 +149,7 @@ public class SinaWeiBoUserInfoActivity extends PtrActivity {
     }
 
 
-    private void translateTab(int scrollY, boolean animated) {
+    public void translateTab(int scrollY, boolean animated) {
         View toolbar = findViewById(R.id.toolbar);
         View imageView = findViewById(R.id.image);
         int minImgTransitionY = mFlexibleSpaceHeight - mToolbarSize - mTabHeight;
@@ -132,8 +168,8 @@ public class SinaWeiBoUserInfoActivity extends PtrActivity {
         }
     }
 
-    @Override
-    public void onPull(PtrIndicator ptrIndicator) {
+
+    public void pull(PtrIndicator ptrIndicator) {
         float scale = (float) (ptrIndicator.getCurrentPosY() + mFlexibleSpaceHeight) / mFlexibleSpaceHeight;
         ViewHelper.setPivotX(image, image.getWidth() / 2);
         ViewHelper.setPivotY(image, 0);
@@ -142,9 +178,16 @@ public class SinaWeiBoUserInfoActivity extends PtrActivity {
         ViewHelper.setTranslationY(mSlidingTabLayout, mFlexibleSpaceHeight - mTabHeight + ptrIndicator.getCurrentPosY());
     }
 
+
     @Override
-    public boolean checkCanDoRefresh() {
+    public boolean canPull() {
+        //需要修改
         return mFrontViewScrollY == 0;
+    }
+
+    @Override
+    public boolean validPullSize(int pullSize) {
+        return pullSize <= MAX_PULL_DISTANCE;
     }
 
     private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {

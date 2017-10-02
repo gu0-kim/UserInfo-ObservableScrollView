@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll.sinaweibo;
+package com.gu.userinfo.observablescroll.sinaweibo.view;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -90,7 +90,7 @@ public class UserInfoRecyclerViewFragment extends ObservableFragment {
         SinaWeiBoUserInfoActivity parentActivity =
                 (SinaWeiBoUserInfoActivity) getActivity();
         if (parentActivity != null) {
-            parentActivity.onScrollChanged(scrollY, scrollY - mScrollY);
+            parentActivity.getPresenter().onScrollChanged(scrollY, scrollY - mScrollY);
         }
         mScrollY = scrollY;
     }

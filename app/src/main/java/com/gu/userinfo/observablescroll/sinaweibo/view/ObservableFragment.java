@@ -1,4 +1,4 @@
-package com.gu.userinfo.observablescroll.sinaweibo;
+package com.gu.userinfo.observablescroll.sinaweibo.view;
 
 import android.os.Bundle;
 import android.view.View;
