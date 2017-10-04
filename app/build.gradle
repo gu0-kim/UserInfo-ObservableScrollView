@@ -5,7 +5,6 @@ android {
         release {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            //storeFile file('C:\\Users\\devel\\save_key\\debug.keystore')
             storePassword 'android'
             storeFile file(KEY_PATH + KEY_NAME)
         }
@@ -44,6 +43,7 @@ android {
             targetSdkVersion 26
             versionCode 1
             versionName '1.0'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -64,7 +64,7 @@ dependencies {
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.developergu:statusbarcolortools:1.0.0'
-    compile 'com.android.support:support-v4:26.+'
+    compile 'com.android.support:support-v4:26.0.0-alpha1'
     testCompile 'junit:junit:4.12'
 }
 
