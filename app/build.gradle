@@ -5,8 +5,9 @@ android {
         release {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('C:\\Users\\devel\\save_key\\debug.keystore')
+            //storeFile file('C:\\Users\\devel\\save_key\\debug.keystore')
             storePassword 'android'
+            storeFile file(KEY_PATH + KEY_NAME)
         }
     }
     compileSdkVersion 26
