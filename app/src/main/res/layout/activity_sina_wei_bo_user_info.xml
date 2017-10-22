@@ -24,6 +24,7 @@
         android:id="@+id/pager_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        cube_ptr:ptr_keep_header_when_refresh="false"
         cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
         cube_ptr:ptr_resistance="1.7">
 
@@ -46,7 +47,15 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/toolbarCustomStyle" />
+        android:theme="@style/toolbarCustomStyle">
+
+        <ImageView
+            android:id="@+id/pb"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/pb_in_action" />
+    </android.support.v7.widget.Toolbar>
 
 
     <com.gu.userinfo.observablescroll.widget.SlidingTabLayout

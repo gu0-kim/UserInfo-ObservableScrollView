@@ -11,15 +11,22 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".backup.MainActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".backup.FlexibleSpaceWithImageWithViewPagerTabActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".cloudmusic.CloudMusicTabActivity"
             android:theme="@style/AppTheme">
+
         </activity>
-        <activity android:name=".sinaweibo.view.SinaWeiBoUserInfoActivity"
+        <activity
+            android:name=".sinaweibo.view.SinaWeiBoUserInfoActivity"
+            android:theme="@style/AppTheme">
+
+        </activity>
+        <activity
+            android:name=".sinaweibo_.view.activity.TabAndViewPagerView"
             android:theme="@style/AppTheme">
 
             <intent-filter>

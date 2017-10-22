@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll.sinaweibo.view;
+package com.gu.userinfo.observablescroll.sinaweibo;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 
 import com.gu.observableviewlibrary.ObservableRecyclerView;
 import com.gu.userinfo.observablescroll.R;
+import com.gu.userinfo.observablescroll.sinaweibo.view.SinaWeiBoUserInfoActivity;
 
 
 public class UserInfoRecyclerViewFragment extends ObservableFragment {
@@ -83,10 +84,10 @@ public class UserInfoRecyclerViewFragment extends ObservableFragment {
 
     @Override
     public void updateFlexibleSpace(int scrollY, View view) {
-        if (first) {
-            first = false;
-            return;
-        }
+//        if (first) {
+//            first = false;
+//            return;
+//        }
         SinaWeiBoUserInfoActivity parentActivity =
                 (SinaWeiBoUserInfoActivity) getActivity();
         if (parentActivity != null) {

@@ -215,61 +215,61 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                 dispatchOnUpOrCancelMotionEvent(mScrollState);
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mPrevMoveEvent == null) {
-                    mPrevMoveEvent = ev;
-                }
-                float diffY = ev.getY() - mPrevMoveEvent.getY();
-                mPrevMoveEvent = MotionEvent.obtainNoHistory(ev);
-                if (getCurrentScrollY() - diffY <= 0) {
-                    // Can't scroll anymore.
-
-                    if (mIntercepted) {
-                        // Already dispatched ACTION_DOWN event to parents, so stop here.
-                        return false;
-                    }
-
-                    // Apps can set the interception target other than the direct parent.
-                    final ViewGroup parent;
-                    if (mTouchInterceptionViewGroup == null) {
-                        parent = (ViewGroup) getParent();
-                    } else {
-                        parent = mTouchInterceptionViewGroup;
-                    }
-
-                    // Get offset to parents. If the parent is not the direct parent,
-                    // we should aggregate offsets from all of the parents.
-                    float offsetX = 0;
-                    float offsetY = 0;
-                    for (View v = this; v != null && v != parent; v = (View) v.getParent()) {
-                        offsetX += v.getLeft() - v.getScrollX();
-                        offsetY += v.getTop() - v.getScrollY();
-                    }
-                    final MotionEvent event = MotionEvent.obtainNoHistory(ev);
-                    event.offsetLocation(offsetX, offsetY);
-
-                    if (parent.onInterceptTouchEvent(event)) {
-                        mIntercepted = true;
-
-                        // If the parent wants to intercept ACTION_MOVE events,
-                        // we pass ACTION_DOWN event to the parent
-                        // as if these touch events just have began now.
-                        event.setAction(MotionEvent.ACTION_DOWN);
-
-                        // Return this onTouchEvent() first and set ACTION_DOWN event for parent
-                        // to the queue, to keep events sequence.
-                        post(new Runnable() {
-                            @Override
-                            public void run() {
-                                parent.dispatchTouchEvent(event);
-                            }
-                        });
-                        return false;
-                    }
-                    // Even when this can't be scrolled anymore,
-                    // simply returning false here may cause subView's click,
-                    // so delegate it to super.
-                    return super.onTouchEvent(ev);
-                }
+//                if (mPrevMoveEvent == null) {
+//                    mPrevMoveEvent = ev;
+//                }
+//                float diffY = ev.getY() - mPrevMoveEvent.getY();
+//                mPrevMoveEvent = MotionEvent.obtainNoHistory(ev);
+//                if (getCurrentScrollY() - diffY <= 0) {
+//                    // Can't scroll anymore.
+//
+//                    if (mIntercepted) {
+//                        // Already dispatched ACTION_DOWN event to parents, so stop here.
+//                        return false;
+//                    }
+//
+//                    // Apps can set the interception target other than the direct parent.
+//                    final ViewGroup parent;
+//                    if (mTouchInterceptionViewGroup == null) {
+//                        parent = (ViewGroup) getParent();
+//                    } else {
+//                        parent = mTouchInterceptionViewGroup;
+//                    }
+//
+//                    // Get offset to parents. If the parent is not the direct parent,
+//                    // we should aggregate offsets from all of the parents.
+//                    float offsetX = 0;
+//                    float offsetY = 0;
+//                    for (View v = this; v != null && v != parent; v = (View) v.getParent()) {
+//                        offsetX += v.getLeft() - v.getScrollX();
+//                        offsetY += v.getTop() - v.getScrollY();
+//                    }
+//                    final MotionEvent event = MotionEvent.obtainNoHistory(ev);
+//                    event.offsetLocation(offsetX, offsetY);
+//
+//                    if (parent.onInterceptTouchEvent(event)) {
+//                        mIntercepted = true;
+//
+//                        // If the parent wants to intercept ACTION_MOVE events,
+//                        // we pass ACTION_DOWN event to the parent
+//                        // as if these touch events just have began now.
+//                        event.setAction(MotionEvent.ACTION_DOWN);
+//
+//                        // Return this onTouchEvent() first and set ACTION_DOWN event for parent
+//                        // to the queue, to keep events sequence.
+//                        post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                parent.dispatchTouchEvent(event);
+//                            }
+//                        });
+//                        return false;
+//                    }
+//                    // Even when this can't be scrolled anymore,
+//                    // simply returning false here may cause subView's click,
+//                    // so delegate it to super.
+//                    return super.onTouchEvent(ev);
+//                }
                 break;
         }
         return super.onTouchEvent(ev);
@@ -501,7 +501,7 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
         }
 
         public static final Creator<SavedState> CREATOR
-            = new Creator<SavedState>() {
+                = new Creator<SavedState>() {
             @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);

@@ -1,6 +1,7 @@
-package com.gu.userinfo.observablescroll.sinaweibo.view;
+package com.gu.userinfo.observablescroll.sinaweibo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.gu.observableviewlibrary.ObservableScrollViewCallbacks;
@@ -8,6 +9,8 @@ import com.gu.observableviewlibrary.ScrollState;
 import com.gu.observableviewlibrary.Scrollable;
 import com.gu.userinfo.observablescroll.BaseFragment;
 import com.gu.userinfo.observablescroll.R;
+
+import static com.gu.userinfo.observablescroll.sinaweibo.view.SinaWeiBoUserInfoActivity.TAG;
 
 
 public abstract class ObservableFragment extends BaseFragment
@@ -30,6 +33,7 @@ public abstract class ObservableFragment extends BaseFragment
 
     /**
      * scrollableview滚动时回调
+     *
      * @param scrollY     Scroll position in Y axis.
      * @param firstScroll True when this is called for the first time in the consecutive motion events.
      * @param dragging    True when the view is dragged and false when the view is scrolled in the inertia.
@@ -39,8 +43,10 @@ public abstract class ObservableFragment extends BaseFragment
         if (getView() == null) {
             return;
         }
-        if (!firstScroll)
-            updateFlexibleSpace(scrollY, getView());
+        if (firstScroll)
+            Log.e(TAG, "onScrollChanged: firstScroll=" + firstScroll + ",scrollY=" + scrollY);
+//        if (!firstScroll)
+        updateFlexibleSpace(scrollY, getView());
     }
 
     @Override
