@@ -19,7 +19,7 @@ public abstract class UserInfoPresent<T extends UserInfoView> {
         return view;
     }
 
-    abstract public void onInit();
+    abstract public void onCreate();
 
     abstract public void showLoading();
 

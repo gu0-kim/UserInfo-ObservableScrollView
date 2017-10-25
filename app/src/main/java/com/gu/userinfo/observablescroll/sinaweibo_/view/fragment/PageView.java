@@ -19,6 +19,10 @@ public interface PageView {
 
     public void stopLoading();
 
+    public void notifyFinishLoad();
+
+    public void notifyStartLoad();
+
 
     public void setData(List<String> list);
 

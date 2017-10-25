@@ -9,19 +9,19 @@ android {
             storeFile file(KEY_PATH + KEY_NAME)
         }
     }
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
-    defaultConfig {
-        applicationId "com.gu.userinfo.observablescroll"
-        minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        jackOptions {
-            enabled true
-        }
-    }
+//    compileSdkVersion 26
+//    buildToolsVersion "26.0.1"
+//    defaultConfig {
+//        applicationId "com.gu.userinfo.observablescroll"
+//        minSdkVersion 14
+//        targetSdkVersion 26
+//        versionCode 1
+//        versionName "1.0"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        jackOptions {
+//            enabled true
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled false
@@ -38,12 +38,18 @@ android {
     }
     productFlavors {
         flavor {
+            compileSdkVersion 26
+            buildToolsVersion "26.0.1"
+            //
             minSdkVersion 14
             applicationId 'com.gu.userinfo.observablemaster'
             targetSdkVersion 26
             versionCode 1
             versionName '1.0'
             signingConfig signingConfigs.release
+            jackOptions {
+                enabled true
+            }
         }
     }
 }
@@ -65,8 +71,9 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.developergu:statusbarcolortools:1.0.0'
     compile 'com.android.support:support-v4:26.0.0-alpha1'
-    testCompile 'junit:junit:4.12'
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    compile 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0'
+    testCompile 'junit:junit:4.12'
 }
 
 

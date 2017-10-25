@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         cube_ptr:ptr_keep_header_when_refresh="false"
-        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
+        cube_ptr:ptr_ratio_of_header_height_to_refresh="0.8"
         cube_ptr:ptr_resistance="1.7">
 
         <android.support.v4.view.ViewPager
@@ -54,7 +54,7 @@
             android:layout_width="?attr/actionBarSize"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
-            android:src="@drawable/pb_in_action" />
+            android:src="@drawable/pb_level" />
     </android.support.v7.widget.Toolbar>
 
 

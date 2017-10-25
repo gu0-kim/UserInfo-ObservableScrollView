@@ -1,23 +1,36 @@
 package com.gu.userinfo.observablescroll.sinaweibo_.view.activity;
 
-import android.support.v4.app.Fragment;
+import com.gu.userinfo.observablescroll.sinaweibo_.view.fragment.PageView;
 
 /**
  * @author developergu
  * @version v1.0.0
  * @since 2017/10/19
  */
-
 public interface UserInfoView {
-    public void showLoading();
+  public void showLoading();
 
-    public void showLoadError();
+  public void stopLoading();
 
-    public void loadComplete();
+  public boolean checkState(int index);
 
-    public boolean canPull();
+  public void showLoadError();
 
-    public boolean validPullSize(int pullSize);
+  public void loadComplete();
 
-    public Fragment getCurrentView();
+  public boolean canPull();
+
+  public boolean validPullSize(int pullSize);
+
+  public void showProgressBar();
+
+  public void showButton();
+
+  public void rotateProgressBar(float delta);
+
+  public void stopProgressBarAnim();
+
+  public PageView getCurrentView();
+
+  public int getCurrentIndex();
 }
