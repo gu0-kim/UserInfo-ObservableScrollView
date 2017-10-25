@@ -97,7 +97,6 @@ public class UserInfoRecyclerViewFragment extends ObservableFragment implements 
     Log.e(TAG, "onActivityCreated: loadData");
   }
 
-
   @Override
   public void onDestroyView() {
     super.onDestroyView();
@@ -177,6 +176,11 @@ public class UserInfoRecyclerViewFragment extends ObservableFragment implements 
   @Override
   public void notifyStartLoad() {
     Rxbus.getInstance().sendMsg(new Rxbus.Msg(getIndex(), Rxbus.MsgType.START, "finsh load!"));
+  }
+
+  @Override
+  public boolean isTop() {
+    return mScrollY == 0;
   }
 
   @Override
