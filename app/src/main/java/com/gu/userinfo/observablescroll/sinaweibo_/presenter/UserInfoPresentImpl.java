@@ -31,10 +31,12 @@ public class UserInfoPresentImpl<T extends UserInfoView> extends UserInfoPresent
                 msg -> {
                   if (view.getCurrentIndex() != msg.getIndex()) return;
                   if (msg.getType().equals(Rxbus.MsgType.START)) {
+                    view.horizontalScrollable(false);
                     view.showProgressBar();
                     view.showLoading();
                     Log.e("TAG", "receive msg start ! index:" + msg.getIndex());
                   } else if (msg.getType().equals(Rxbus.MsgType.FIN)) {
+                    view.horizontalScrollable(true);
                     view.stopLoading();
                     view.loadComplete();
                     Log.e("TAG", "receive msg finish ! index:" + msg.getIndex());

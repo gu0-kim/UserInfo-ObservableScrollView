@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.gu.observableviewlibrary.CacheFragmentStatePagerAdapter;
 import com.gu.observableviewlibrary.ScrollUtils;
@@ -22,6 +23,7 @@ import com.gu.userinfo.observablescroll.sinaweibo_.presenter.UserInfoPresentImpl
 import com.gu.userinfo.observablescroll.sinaweibo_.view.fragment.ObservableFragment;
 import com.gu.userinfo.observablescroll.sinaweibo_.view.fragment.PageView;
 import com.gu.userinfo.observablescroll.sinaweibo_.view.fragment.UserInfoRecyclerViewFragment;
+import com.gu.userinfo.observablescroll.sinaweibo_.widget.CanStopViewPager;
 import com.gu.userinfo.observablescroll.widget.SlidingTabLayout;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.nineoldandroids.view.ViewPropertyAnimator;
@@ -48,6 +50,8 @@ public class TabAndViewPagerView extends BaseActivity
   private int mTabHeight;
   private int mToolbarSize;
   private SlidingTabLayout mSlidingTabLayout;
+  private LinearLayout headerLayout;
+  private Toolbar toolbar;
   private ViewPager mPager;
   private NavigationAdapter mPagerAdapter;
   private int mFrontViewScrollY;
@@ -55,6 +59,8 @@ public class TabAndViewPagerView extends BaseActivity
   private static final int MAX_PULL_DISTANCE = 300;
   private boolean mValidPullSize = true;
   private Animation mRotateAnimation;
+  private int headerLayoutInitY, tabLayoutInitY;
+  private int minImgTransitionY;
   PtrClassicFrameLayout ptrFrame;
   ImageView pb;
   UserInfoPresent present;
@@ -62,21 +68,18 @@ public class TabAndViewPagerView extends BaseActivity
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_sina_wei_bo_user_info);
+    setContentView(R.layout.activity_userinfo_main);
 
     present = new UserInfoPresentImpl<>(this);
     present.onCreate();
 
     image = (ImageView) findViewById(R.id.image);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    headerLayout = (LinearLayout) findViewById(R.id.headerlayout);
+    toolbar = (Toolbar) findViewById(R.id.toolbar);
     toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
     toolbar.setTitle("我的电台");
     toolbar.setContentInsetStartWithNavigation(0);
     setSupportActionBar(toolbar);
-
-    mFlexibleSpaceHeight =
-        getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
-    mTabHeight = getResources().getDimensionPixelSize(R.dimen.tab_height);
 
     pb = (ImageView) findViewById(R.id.pb);
     RxView.clicks(pb)
@@ -94,12 +97,13 @@ public class TabAndViewPagerView extends BaseActivity
     mSlidingTabLayout.setDistributeEvenly(true);
     mSlidingTabLayout.setViewPager(mPager);
 
+    toolbar.setNavigationOnClickListener(v -> finish());
     // Initialize the first Fragment's state when layout is completed.
     ScrollUtils.addOnGlobalLayoutListener(
         mSlidingTabLayout,
         () -> {
-          mToolbarSize = toolbar.getHeight();
-          translateTab(0, false);
+          loadDimens();
+          translateTab(0);
         });
 
     ptrFrame = (PtrClassicFrameLayout) findViewById(R.id.pager_wrapper);
@@ -107,6 +111,16 @@ public class TabAndViewPagerView extends BaseActivity
     ptrFrame.getHeader().setVisibility(View.INVISIBLE);
     ptrFrame.setPtrHandler(this);
     ptrFrame.addPtrUIHandler(this);
+  }
+
+  /** call from addOnGlobalLayoutListener,load height and initY parameter */
+  private void loadDimens() {
+    mFlexibleSpaceHeight = image.getHeight();
+    mTabHeight = mSlidingTabLayout.getHeight();
+    mToolbarSize = toolbar.getHeight();
+    minImgTransitionY = mFlexibleSpaceHeight - mToolbarSize - mTabHeight;
+    tabLayoutInitY = mFlexibleSpaceHeight - mTabHeight;
+    headerLayoutInitY = (mFlexibleSpaceHeight - mTabHeight - headerLayout.getHeight()) / 2;
   }
 
   @Override
@@ -197,7 +211,10 @@ public class TabAndViewPagerView extends BaseActivity
   @Override
   public boolean canPull() {
     // 需要修改
-    return mValidPullSize && mFrontViewScrollY == 0 && !getCurrentView().isLoading();
+    return mValidPullSize
+        && mFrontViewScrollY == 0
+        && !getCurrentView().isLoading()
+        && getCurrentView().isTop();
   }
 
   @Override
@@ -238,21 +255,26 @@ public class TabAndViewPagerView extends BaseActivity
     return mPager.getCurrentItem();
   }
 
+  @Override
+  public void horizontalScrollable(boolean can) {
+    ((CanStopViewPager) mPager).canHorizontalScroll(can);
+    mSlidingTabLayout.setItemClickable(can);
+  }
+
   /**
    * Front view move up
    *
    * @param deltaY scroll others by deltaY when currentItem moves up.
    */
   private void moveBy(int deltaY) {
-    int adjustedScrollY =
-        Math.min(mFrontViewScrollY + deltaY, mFlexibleSpaceHeight - mTabHeight - mToolbarSize);
-    translateTab(adjustedScrollY, false);
+    int adjustedScrollY = Math.min(mFrontViewScrollY + deltaY, minImgTransitionY);
+    translateTab(adjustedScrollY);
     propagateScroll(adjustedScrollY - mFrontViewScrollY);
     mFrontViewScrollY = adjustedScrollY;
   }
 
   private void moveTo(int scrollY) {
-    translateTab(scrollY, false);
+    translateTab(scrollY);
     propagateScroll(scrollY - mFrontViewScrollY);
     mFrontViewScrollY = scrollY;
   }
@@ -284,30 +306,20 @@ public class TabAndViewPagerView extends BaseActivity
     }
   }
 
-  private void translateTab(int scrollY, boolean animated) {
-    View toolbar = findViewById(R.id.toolbar);
-    View imageView = findViewById(R.id.image);
-    int minImgTransitionY = mFlexibleSpaceHeight - mToolbarSize - mTabHeight;
-    float alpha = scrollY >= minImgTransitionY ? 1 : 0;
+  private void translateTab(int scrollY) {
+    float alpha = scrollY >= minImgTransitionY ? 1 : (float) scrollY / minImgTransitionY;
     toolbar.setBackgroundColor(
         ScrollUtils.getColorWithAlpha(alpha, ContextCompat.getColor(this, R.color.colorPrimary)));
-    imageView.setTranslationY(ScrollUtils.getFloat(-scrollY, -minImgTransitionY, 0));
-
+    headerLayout.setAlpha(1 - alpha);
+    image.setTranslationY(ScrollUtils.getFloat(-scrollY, -minImgTransitionY, 0));
     ViewPropertyAnimator.animate(mSlidingTabLayout).cancel();
     float tabTranslationY =
+        ScrollUtils.getFloat(-scrollY + tabLayoutInitY, mToolbarSize, tabLayoutInitY);
+    float headLayoutTranslationY =
         ScrollUtils.getFloat(
-            -scrollY + mFlexibleSpaceHeight - mTabHeight,
-            mToolbarSize,
-            mFlexibleSpaceHeight - mTabHeight);
-    if (animated) {
-      ViewPropertyAnimator.animate(mSlidingTabLayout)
-          .translationY(tabTranslationY)
-          .setDuration(200)
-          .start();
-    } else {
-      mSlidingTabLayout.setTranslationY(tabTranslationY);
-      //      ViewHelper.setTranslationY(mSlidingTabLayout, tabTranslationY);
-    }
+            -scrollY + headerLayoutInitY, -headerLayout.getHeight(), headerLayoutInitY);
+    mSlidingTabLayout.setTranslationY(tabTranslationY);
+    headerLayout.setTranslationY(headLayoutTranslationY);
   }
 
   private void updatePullFlag(int posy) {
@@ -320,8 +332,8 @@ public class TabAndViewPagerView extends BaseActivity
     image.setPivotY(0);
     image.setScaleX(scale);
     image.setScaleY(scale);
-    mSlidingTabLayout.setTranslationY(mFlexibleSpaceHeight - mTabHeight + posy);
-
+    mSlidingTabLayout.setTranslationY(tabLayoutInitY + posy);
+    headerLayout.setTranslationY(headerLayoutInitY + posy);
     //    ViewHelper.setPivotX(image, image.getWidth() / 2);
     //    ViewHelper.setPivotY(image, 0);
     //    ViewHelper.setScaleX(image, scale);

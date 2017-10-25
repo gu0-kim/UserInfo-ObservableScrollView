@@ -33,4 +33,6 @@ public interface UserInfoView {
   public PageView getCurrentView();
 
   public int getCurrentIndex();
+
+  public void horizontalScrollable(boolean can);
 }
