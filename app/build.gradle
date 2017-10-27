@@ -9,19 +9,7 @@ android {
             storeFile file(KEY_PATH + KEY_NAME)
         }
     }
-//    compileSdkVersion 26
-//    buildToolsVersion "26.0.1"
-//    defaultConfig {
-//        applicationId "com.gu.userinfo.observablescroll"
-//        minSdkVersion 14
-//        targetSdkVersion 26
-//        versionCode 1
-//        versionName "1.0"
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//        jackOptions {
-//            enabled true
-//        }
-//    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -30,26 +18,27 @@ android {
         }
         customRelease {
             signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    flavorDimensions "flavor"
     productFlavors {
         flavor {
+            dimension "flavor"
             compileSdkVersion 26
-            buildToolsVersion "26.0.1"
-            //
+            buildToolsVersion "26.0.2"
             minSdkVersion 14
             applicationId 'com.gu.userinfo.observablemaster'
             targetSdkVersion 26
             versionCode 1
             versionName '1.0'
             signingConfig signingConfigs.release
-            jackOptions {
-                enabled true
-            }
         }
     }
 }
@@ -63,82 +52,56 @@ dependencies {
     //
     //注意customReleaseCompile的写法和Build Variants中的customRelease对应
     //    compile 'com.gu:observablescrollview:1.0.0'
-    customReleaseCompile project(':observableviewlibrary')
-    releaseCompile project(':observableviewlibrary')
-    debugCompile project(':observableviewlibrary')
+//    customReleaseCompile project(':observableviewlibrary')
+//    releaseCompile project(':observableviewlibrary')
+//    debugCompile project(':observableviewlibrary')
+
+
+    compile project(':observableviewlibrary')
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.developergu:statusbarcolortools:1.0.0'
-    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support:support-v4:26.0.0-beta1'
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     compile 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0'
     testCompile 'junit:junit:4.12'
 }
 
-
-
+//android.applicationVariants.all { variant ->
+//
+//    variant.outputs.each { output ->
+//        println "原始文件名： " + output.outputFile.name
+//        def outputFile = output.outputFile
+//        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//            def fileName = outputFile.name;
+////            if (android.defaultConfig.versionName != null) {
+////                fileName = fileName.replace(".apk", "-${android.defaultConfig.versionName}.apk")
+////            }
+////            if (project.hasProperty('OUT_PUT_APK_SUFFIX_PARA')) {
+////                fileName = fileName.replace(".apk", "-${OUT_PUT_APK_SUFFIX_PARA}.apk")
+////            }
+////            def today = new Date().format('yyMMddHHmm');
+////            fileName = fileName.replace(".apk", "-${today}.apk")
+//            if (project.hasProperty('OUT_PUT_DIR_PARA')) {
+//                File output_dir1 = file("${OUT_PUT_DIR_PARA}");
+//                output.outputFile = new File(output_dir1, fileName)
+//                println "输出文件位置： " + output.outputFile
+//                //}
+//            } else {
+//                output.outputFile = new File(outputFile.parent, fileName)
+//                println "__输出文件位置__： " + output.outputFile
+//            }
+//        }
+//    }
+//}
 android.applicationVariants.all { variant ->
-
-    variant.outputs.each { output ->
-        println "原始文件名： " + output.outputFile.name
-        def outputFile = output.outputFile
-        if (outputFile != null && outputFile.name.endsWith('.apk')) {
-            def fileName = outputFile.name;
-//            if (android.defaultConfig.versionName != null) {
-//                fileName = fileName.replace(".apk", "-${android.defaultConfig.versionName}.apk")
-//            }
-//            if (project.hasProperty('OUT_PUT_APK_SUFFIX_PARA')) {
-//                fileName = fileName.replace(".apk", "-${OUT_PUT_APK_SUFFIX_PARA}.apk")
-//            }
-//            def today = new Date().format('yyMMddHHmm');
-//            fileName = fileName.replace(".apk", "-${today}.apk")
-            if (project.hasProperty('OUT_PUT_DIR_PARA')) {
-                File output_dir1 = file("${OUT_PUT_DIR_PARA}");
-                output.outputFile = new File(output_dir1, fileName)
-                println "输出文件位置： " + output.outputFile
-                //}
-            } else {
-                output.outputFile = new File(outputFile.parent, fileName)
-                println "__输出文件位置__： " + output.outputFile
-            }
-        }
+    variant.outputs.all {
+        outputFileName = "${variant.name}-${variant.versionName}.apk"
     }
 }
-
 
 def apk_output = "../apk/"
 clean {
     delete apk_output
 }
-//build {
-//    doLast {
-//        def fileName = "app-release.apk"
-//        def fromFile = "./build/outputs/apk/" + fileName
-//        def intoFile = "../apk/"
-//
-//
-//        def applicationId = android.defaultConfig.applicationId
-//        def versionName = android.defaultConfig.versionName
-//        def time = new java.text.SimpleDateFormat("yyyyMMddHHmmss").format(new Date())
-//        def buildType = "realse"
-//        def channel = "site"
-//
-//
-//        def appName = "${applicationId}_v${versionName}_${time}_${buildType}_${channel}.apk"
-//
-//
-//        // copy --> rename
-//        copy {
-//            from fromFile
-//            into intoFile
-//
-//
-//            rename {
-//                appName
-//            }
-//        }
-//
-//        println("=====================build.doLast success.=========================")
-//    }
-//}

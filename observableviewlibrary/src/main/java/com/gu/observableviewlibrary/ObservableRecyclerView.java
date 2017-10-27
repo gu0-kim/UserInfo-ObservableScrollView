@@ -31,9 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * RecyclerView that its scroll position can be observed.
- * Before using this, please consider to use the RecyclerView.OnScrollListener
- * provided by the support library officially.
+ * RecyclerView that its scroll position can be observed. Before using this, please consider to use
+ * the RecyclerView.OnScrollListener provided by the support library officially.
  */
 public class ObservableRecyclerView extends RecyclerView implements Scrollable {
 
@@ -110,7 +109,8 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                 int childHeight = 0;
                 View child = getChildAt(j);
                 if (child != null) {
-                    if (mChildrenHeights.indexOfKey(i) < 0 || (child.getHeight() != mChildrenHeights.get(i))) {
+                    if (mChildrenHeights.indexOfKey(i) < 0
+                            || (child.getHeight() != mChildrenHeights.get(i))) {
                         childHeight = child.getHeight();
                     }
                 }
@@ -134,7 +134,8 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                             }
                         }
                     }
-                    mPrevScrolledChildrenHeight += mPrevFirstVisibleChildHeight + skippedChildrenHeight;
+                    mPrevScrolledChildrenHeight +=
+                            mPrevFirstVisibleChildHeight + skippedChildrenHeight;
                     mPrevFirstVisibleChildHeight = firstVisibleChild.getHeight();
                 } else if (firstVisiblePosition < mPrevFirstVisiblePosition) {
                     // scroll up
@@ -151,7 +152,8 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                             }
                         }
                     }
-                    mPrevScrolledChildrenHeight -= firstVisibleChild.getHeight() + skippedChildrenHeight;
+                    mPrevScrolledChildrenHeight -=
+                            firstVisibleChild.getHeight() + skippedChildrenHeight;
                     mPrevFirstVisibleChildHeight = firstVisibleChild.getHeight();
                 } else if (firstVisiblePosition == 0) {
                     mPrevFirstVisibleChildHeight = firstVisibleChild.getHeight();
@@ -160,7 +162,8 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                 if (mPrevFirstVisibleChildHeight < 0) {
                     mPrevFirstVisibleChildHeight = 0;
                 }
-                mScrollY = mPrevScrolledChildrenHeight - firstVisibleChild.getTop() + getPaddingTop();
+                mScrollY =
+                        mPrevScrolledChildrenHeight - firstVisibleChild.getTop() + getPaddingTop();
                 mPrevFirstVisiblePosition = firstVisiblePosition;
 
                 dispatchOnScrollChanged(mScrollY, mFirstScroll, mDragging);
@@ -169,10 +172,10 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                 }
 
                 if (mPrevScrollY < mScrollY) {
-                    //down
+                    // down
                     mScrollState = ScrollState.UP;
                 } else if (mScrollY < mPrevScrollY) {
-                    //up
+                    // up
                     mScrollState = ScrollState.DOWN;
                 } else {
                     mScrollState = ScrollState.STOP;
@@ -215,61 +218,67 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
                 dispatchOnUpOrCancelMotionEvent(mScrollState);
                 break;
             case MotionEvent.ACTION_MOVE:
-//                if (mPrevMoveEvent == null) {
-//                    mPrevMoveEvent = ev;
-//                }
-//                float diffY = ev.getY() - mPrevMoveEvent.getY();
-//                mPrevMoveEvent = MotionEvent.obtainNoHistory(ev);
-//                if (getCurrentScrollY() - diffY <= 0) {
-//                    // Can't scroll anymore.
-//
-//                    if (mIntercepted) {
-//                        // Already dispatched ACTION_DOWN event to parents, so stop here.
-//                        return false;
-//                    }
-//
-//                    // Apps can set the interception target other than the direct parent.
-//                    final ViewGroup parent;
-//                    if (mTouchInterceptionViewGroup == null) {
-//                        parent = (ViewGroup) getParent();
-//                    } else {
-//                        parent = mTouchInterceptionViewGroup;
-//                    }
-//
-//                    // Get offset to parents. If the parent is not the direct parent,
-//                    // we should aggregate offsets from all of the parents.
-//                    float offsetX = 0;
-//                    float offsetY = 0;
-//                    for (View v = this; v != null && v != parent; v = (View) v.getParent()) {
-//                        offsetX += v.getLeft() - v.getScrollX();
-//                        offsetY += v.getTop() - v.getScrollY();
-//                    }
-//                    final MotionEvent event = MotionEvent.obtainNoHistory(ev);
-//                    event.offsetLocation(offsetX, offsetY);
-//
-//                    if (parent.onInterceptTouchEvent(event)) {
-//                        mIntercepted = true;
-//
-//                        // If the parent wants to intercept ACTION_MOVE events,
-//                        // we pass ACTION_DOWN event to the parent
-//                        // as if these touch events just have began now.
-//                        event.setAction(MotionEvent.ACTION_DOWN);
-//
-//                        // Return this onTouchEvent() first and set ACTION_DOWN event for parent
-//                        // to the queue, to keep events sequence.
-//                        post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                parent.dispatchTouchEvent(event);
-//                            }
-//                        });
-//                        return false;
-//                    }
-//                    // Even when this can't be scrolled anymore,
-//                    // simply returning false here may cause subView's click,
-//                    // so delegate it to super.
-//                    return super.onTouchEvent(ev);
-//                }
+                //                if (mPrevMoveEvent == null) {
+                //                    mPrevMoveEvent = ev;
+                //                }
+                //                float diffY = ev.getY() - mPrevMoveEvent.getY();
+                //                mPrevMoveEvent = MotionEvent.obtainNoHistory(ev);
+                //                if (getCurrentScrollY() - diffY <= 0) {
+                //                    // Can't scroll anymore.
+                //
+                //                    if (mIntercepted) {
+                //                        // Already dispatched ACTION_DOWN event to parents, so
+                // stop here.
+                //                        return false;
+                //                    }
+                //
+                //                    // Apps can set the interception target other than the direct
+                // parent.
+                //                    final ViewGroup parent;
+                //                    if (mTouchInterceptionViewGroup == null) {
+                //                        parent = (ViewGroup) getParent();
+                //                    } else {
+                //                        parent = mTouchInterceptionViewGroup;
+                //                    }
+                //
+                //                    // Get offset to parents. If the parent is not the direct
+                // parent,
+                //                    // we should aggregate offsets from all of the parents.
+                //                    float offsetX = 0;
+                //                    float offsetY = 0;
+                //                    for (View v = this; v != null && v != parent; v = (View)
+                // v.getParent()) {
+                //                        offsetX += v.getLeft() - v.getScrollX();
+                //                        offsetY += v.getTop() - v.getScrollY();
+                //                    }
+                //                    final MotionEvent event = MotionEvent.obtainNoHistory(ev);
+                //                    event.offsetLocation(offsetX, offsetY);
+                //
+                //                    if (parent.onInterceptTouchEvent(event)) {
+                //                        mIntercepted = true;
+                //
+                //                        // If the parent wants to intercept ACTION_MOVE events,
+                //                        // we pass ACTION_DOWN event to the parent
+                //                        // as if these touch events just have began now.
+                //                        event.setAction(MotionEvent.ACTION_DOWN);
+                //
+                //                        // Return this onTouchEvent() first and set ACTION_DOWN
+                // event for
+                // parent
+                //                        // to the queue, to keep events sequence.
+                //                        post(new Runnable() {
+                //                            @Override
+                //                            public void run() {
+                //                                parent.dispatchTouchEvent(event);
+                //                            }
+                //                        });
+                //                        return false;
+                //                    }
+                //                    // Even when this can't be scrolled anymore,
+                //                    // simply returning false here may cause subView's click,
+                //                    // so delegate it to super.
+                //                    return super.onTouchEvent(ev);
+                //                }
                 break;
         }
         return super.onTouchEvent(ev);
@@ -318,15 +327,18 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
     }
 
     /**
-     * <p>Same as {@linkplain #scrollToPosition(int)} but it scrolls to the position not only make
-     * the position visible.</p>
-     * <p>It depends on {@code LayoutManager} how {@linkplain #scrollToPosition(int)} works,
-     * and currently we know that {@linkplain LinearLayoutManager#scrollToPosition(int)} just
-     * make the position visible.</p>
-     * <p>In LinearLayoutManager, scrollToPositionWithOffset() is provided for scrolling to the position.
-     * This method checks which LayoutManager is set,
-     * and handles which method should be called for scrolling.</p>
-     * <p>Other know classes (StaggeredGridLayoutManager and GridLayoutManager) are not tested.</p>
+     * Same as {@linkplain #scrollToPosition(int)} but it scrolls to the position not only make the
+     * position visible.
+     *
+     * <p>It depends on {@code LayoutManager} how {@linkplain #scrollToPosition(int)} works, and
+     * currently we know that {@linkplain LinearLayoutManager#scrollToPosition(int)} just make the
+     * position visible.
+     *
+     * <p>In LinearLayoutManager, scrollToPositionWithOffset() is provided for scrolling to the
+     * position. This method checks which LayoutManager is set, and handles which method should be
+     * called for scrolling.
+     *
+     * <p>Other know classes (StaggeredGridLayoutManager and GridLayoutManager) are not tested.
      *
      * @param position Position to scroll.
      */
@@ -407,21 +419,19 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
     }
 
     /**
-     * This saved state class is a Parcelable and should not extend
-     * {@link View.BaseSavedState} nor {@link android.view.AbsSavedState}
-     * because its super class AbsSavedState's constructor
-     * {@link android.view.AbsSavedState#AbsSavedState(Parcel)} currently passes null
-     * as a class loader to read its superstate from Parcelable.
-     * This causes {@link android.os.BadParcelableException} when restoring saved states.
-     * <p/>
-     * The super class "RecyclerView" is a part of the support library,
-     * and restoring its saved state requires the class loader that loaded the RecyclerView.
-     * It seems that the class loader is not required when restoring from RecyclerView itself,
-     * but it is required when restoring from RecyclerView's subclasses.
+     * This saved state class is a Parcelable and should not extend {@link View.BaseSavedState} nor
+     * {@link android.view.AbsSavedState} because its super class AbsSavedState's constructor {@link
+     * android.view.AbsSavedState#AbsSavedState(Parcel)} currently passes null as a class loader to
+     * read its superstate from Parcelable. This causes {@link android.os.BadParcelableException}
+     * when restoring saved states.
+     *
+     * <p>The super class "RecyclerView" is a part of the support library, and restoring its saved
+     * state requires the class loader that loaded the RecyclerView. It seems that the class loader
+     * is not required when restoring from RecyclerView itself, but it is required when restoring
+     * from RecyclerView's subclasses.
      */
     static class SavedState implements Parcelable {
-        public static final SavedState EMPTY_STATE = new SavedState() {
-        };
+        public static final SavedState EMPTY_STATE = new SavedState() {};
 
         int prevFirstVisiblePosition;
         int prevFirstVisibleChildHeight = -1;
@@ -433,23 +443,17 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
         // This keeps the parent(RecyclerView)'s state
         Parcelable superState;
 
-        /**
-         * Called by EMPTY_STATE instantiation.
-         */
+        /** Called by EMPTY_STATE instantiation. */
         private SavedState() {
             superState = null;
         }
 
-        /**
-         * Called by onSaveInstanceState.
-         */
+        /** Called by onSaveInstanceState. */
         SavedState(Parcelable superState) {
             this.superState = superState != EMPTY_STATE ? superState : null;
         }
 
-        /**
-         * Called by CREATOR.
-         */
+        /** Called by CREATOR. */
         private SavedState(Parcel in) {
             // Parcel 'in' has its parent(RecyclerView)'s saved state.
             // To restore it, class loader that loaded RecyclerView is required.
@@ -500,17 +504,17 @@ public class ObservableRecyclerView extends RecyclerView implements Scrollable {
             return superState;
         }
 
-        public static final Creator<SavedState> CREATOR
-                = new Creator<SavedState>() {
-            @Override
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
+        public static final Creator<SavedState> CREATOR =
+                new Creator<SavedState>() {
+                    @Override
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
 
-            @Override
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
+                    @Override
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
     }
 }
