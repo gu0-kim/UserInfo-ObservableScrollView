@@ -26,6 +26,9 @@
         <activity
             android:name=".sinaweibo_.view.activity.TabAndViewPagerView"
             android:theme="@style/AppTheme">
+
+        </activity>
+        <activity android:name=".cloudmusic_smartrefreshlayout.RefreshLayoutActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/UserInfo-ObservableScrollView.iml" filepath="$PROJECT_DIR$/UserInfo-ObservableScrollView.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/observableviewlibrary/observableviewlibrary.iml" filepath="$PROJECT_DIR$/observableviewlibrary/observableviewlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/refresh-layout/refresh-layout.iml" filepath="$PROJECT_DIR$/refresh-layout/refresh-layout.iml" />
     </modules>
   </component>
 </project>

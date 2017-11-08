@@ -1,1 +1,1 @@
-include ':app', ':observableviewlibrary'
+include ':app', ':observableviewlibrary', ':refresh-layout'

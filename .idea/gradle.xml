@@ -10,6 +10,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/observableviewlibrary" />
+            <option value="$PROJECT_DIR$/refresh-layout" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
