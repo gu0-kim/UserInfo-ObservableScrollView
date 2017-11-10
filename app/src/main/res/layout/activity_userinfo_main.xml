@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         cube_ptr:ptr_keep_header_when_refresh="false"
         cube_ptr:ptr_ratio_of_header_height_to_refresh="0.8"
-        cube_ptr:ptr_resistance="3.0">
+        cube_ptr:ptr_resistance="2.4">
 
         <com.gu.userinfo.observablescroll.sinaweibo_.widget.CanStopViewPager
             android:id="@+id/pager"
