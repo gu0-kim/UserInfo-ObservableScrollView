@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package com.gu.userinfo.observablescroll.cloudmusic;
+package com.gu.userinfo.observablescroll.cloudmusic_smartrefreshlayout;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,20 +28,20 @@ import android.widget.Toast;
 
 import com.gu.observableviewlibrary.ObservableRecyclerView;
 import com.gu.observableviewlibrary.ScrollUtils;
-import com.gu.userinfo.observablescroll.backup.FlexibleSpaceWithImageBaseFragment;
 import com.gu.userinfo.observablescroll.R;
+import com.gu.userinfo.observablescroll.backup.FlexibleSpaceWithImageBaseFragment;
 import com.nineoldandroids.view.ViewHelper;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.SimpleMultiPurposeListener;
 
-public class CloudMusicRecyclerViewFragment
-    extends FlexibleSpaceWithImageBaseFragment<ObservableRecyclerView> {
-  private boolean first = true;
+public class CloudMusicFragment extends FlexibleSpaceWithImageBaseFragment<ObservableRecyclerView> {
   private int mFlexibleSpaceImageHeight;
 
   @Override
   public View onCreateView(
       LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view =
-        inflater.inflate(R.layout.fragment_flexiblespacewithimagerecyclerview, container, false);
+    View view = inflater.inflate(R.layout.fragment_smartrefresh_recyclerview, container, false);
     final ObservableRecyclerView recyclerView = view.findViewById(R.id.scroll);
     recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     recyclerView.setHasFixedSize(false);
@@ -57,10 +58,36 @@ public class CloudMusicRecyclerViewFragment
     // This is a workaround for the issue #117:
     // https://github.com/ksoichiro/Android-ObservableScrollView/issues/117
     recyclerView.setTouchInterceptionViewGroup(view.findViewById(R.id.fragment_root));
-    int scrollY = ((CloudMusicTabActivity) getActivity()).getScrollY();
+    int scrollY = ((RefreshLayoutActivity) getActivity()).getScrollY();
     // Scroll to the specified offset after layout
     initSyncScroll(recyclerView, scrollY);
     recyclerView.setScrollViewCallbacks(this);
+
+    RefreshLayout refreshLayout = view.findViewById(R.id.fragment_root);
+    refreshLayout.setHeaderHeightPx(40);
+    refreshLayout.setOnMultiPurposeListener(
+        new SimpleMultiPurposeListener() {
+          boolean doPull;
+
+          @Override
+          public void onHeaderPulling(
+              RefreshHeader header, float percent, int offset, int headerHeight, int extendHeight) {
+            super.onHeaderPulling(header, percent, offset, headerHeight, extendHeight);
+            Log.e("TAG", "onHeaderPulling: percent=" + percent);
+            doPull = true;
+            ((RefreshLayoutActivity) getActivity()).overScroll(offset);
+          }
+
+          @Override
+          public void onHeaderReleasing(
+              RefreshHeader header, float percent, int offset, int footerHeight, int extendHeight) {
+            super.onHeaderReleasing(header, percent, offset, footerHeight, extendHeight);
+            if (doPull) {
+              ((RefreshLayoutActivity) getActivity()).overScroll(offset);
+            }
+            if (offset == 0) doPull = false;
+          }
+        });
     return view;
   }
 
@@ -105,13 +132,9 @@ public class CloudMusicRecyclerViewFragment
 
   @Override
   public void updateFlexibleSpace(int scrollY, View view) {
-    if (first) {
-      first = false;
-      return;
-    }
     updateScrollableMaskView(scrollY);
     // Also pass this event to parent Activity
-    CloudMusicTabActivity parentActivity = (CloudMusicTabActivity) getActivity();
+    RefreshLayoutActivity parentActivity = (RefreshLayoutActivity) getActivity();
     if (parentActivity != null) {
       parentActivity.onScrollChanged(scrollY, view.findViewById(R.id.scroll));
     }

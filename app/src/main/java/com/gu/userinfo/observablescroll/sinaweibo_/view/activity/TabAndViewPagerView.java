@@ -338,7 +338,8 @@ public class TabAndViewPagerView extends BaseActivity
     //    ViewHelper.setPivotY(image, 0);
     //    ViewHelper.setScaleX(image, scale);
     //    ViewHelper.setScaleY(image, scale);
-    //    ViewHelper.setTranslationY(mSlidingTabLayout, mFlexibleSpaceHeight - mTabHeight + posy);
+    //    ViewHelper.setTranslationY(mSlidingTabLayout, mFlexibleSpaceHeight - mTabHeight +
+    // posy);
   }
 
   private static class NavigationAdapter extends CacheFragmentStatePagerAdapter {
